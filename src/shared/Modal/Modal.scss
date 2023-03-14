@@ -1,0 +1,14 @@
+@import '../../App.scss';
+
+.modal {
+    border-radius: 15px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+
+    #close-btn {
+        height: 3rem;
+        margin-left: 45%;
+        margin-bottom: -2rem;
+    }
+}

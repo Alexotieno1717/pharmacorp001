@@ -1,0 +1,51 @@
+@import '../../App.scss';
+
+.input-goto {
+	width: 100%;
+	padding: 0.375rem 0.3rem 0.375rem 0.3rem;
+	-moz-padding-start: calc(0.75rem - 3px);
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #212529;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	-webkit-appearance: none;
+	appearance: none;
+}
+.table {
+	/*...*/border-spacing:3px 5px;
+	// Highlight border color between thead, tbody and tfoot.
+	> :not(:first-child) {
+		border-top: 2px solid #e2e5e9 !important;
+	}
+}
+
+.page-link {
+	color: #0000FF !important;
+  
+	&:hover {
+	  color: green !important;
+	}
+  
+	&:focus {
+	  color: green !important;
+	}
+  }
+
+.page-item {
+  
+	&.active .page-link {
+	  z-index: 3;
+	  color: #0000FF !important;
+	  border-color: green !important;
+	}
+
+	&.disabled .page-link {
+	color: #6c757d !important;
+	pointer-events: none;
+	background-color: #fff !important;
+	border-color: #dee2e6 !important;
+	}
+  }
