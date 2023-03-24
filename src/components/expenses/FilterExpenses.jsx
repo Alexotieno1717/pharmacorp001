@@ -46,11 +46,11 @@ function FilterExpenses({ filterExpenses, loading, show, handleClose, handleFilt
 					/>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
-						Close
+					<Button variant="secondary" onClick={handleClose} disabled={loading===true}>
+						 {loading === true ? <Spinner color={'#fff'} /> : 'Close'}
 					</Button>
-					<Button variant="primary" onClick={handleFilter}>
-						Filter
+					<Button variant="primary" onClick={handleFilter} disabled={loading===true}>
+						 {loading === true ? <Spinner color={'#fff'}/> : 'Filter'}
 					</Button>
 				</Modal.Footer>
 			</Modal>

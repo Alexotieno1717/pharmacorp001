@@ -39,7 +39,7 @@
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
-  "proxy": "be.instaloans.co.ke",
+  "proxy": "https://be.instaloans.co.ke",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -63,5 +63,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.7"
   }
 }

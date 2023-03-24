@@ -1,7 +1,6 @@
 import React from "react";
 import { Spinner } from "react-bootstrap";
 import { Calendar } from "react-calendar";
-import { SuccessAlert, ValidationAlert } from "../../utils/alerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -36,10 +35,10 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
-						 {loading === true ? <Spinner color={'#fff'}/> : 'Close'}
+					<Button variant="secondary" onClick={handleClose} disabled={loading===true}>
+						 {loading === true ? <Spinner color={'#fff'} /> : 'Close'}
 					</Button>
-					<Button variant="primary" onClick={handleFilter}>
+					<Button variant="primary" onClick={handleFilter} disabled={loading===true}>
 						 {loading === true ? <Spinner color={'#fff'}/> : 'Filter'}
 					</Button>
 				</Modal.Footer>

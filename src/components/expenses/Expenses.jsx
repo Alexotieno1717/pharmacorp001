@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/auth-context'
 import Modal from '../../shared/Modal/Modal'
 import ModalButton from '../../shared/Modal/modal-button/ModalButton'
 import ModalIcon from '../../shared/Modal/modal-button/ModalIcon'
@@ -21,6 +22,7 @@ function Expenses() {
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const { user } = useAuth();
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -30,7 +32,7 @@ function Expenses() {
         console.log(selectedValue[0])
 
         const params = new URLSearchParams({
-            rep_id: 18,
+            rep_id: user.client_id,
             startDate: selectedValue[0] !== undefined ?  selectedValue[0].toISOString().slice(0, 10) : ' ',
             endDate: selectedValue[0] !== undefined ?  selectedValue[1].toISOString().slice(0, 10) : ' ',
         }).toString();

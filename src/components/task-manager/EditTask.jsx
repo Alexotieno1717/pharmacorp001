@@ -1,9 +1,13 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
+import { useAuth } from '../../context/auth-context'
 import { SuccessAlert, ValidationAlert } from '../../utils/alerts'
 
 function EditTask({taskEdit}) {
+
+    const { user } = useAuth()
+
     const [activity, setActivity] = useState('')
     const [location, setLocation] = useState('')
     const [notes, setNotes] = useState('')
@@ -19,7 +23,7 @@ function EditTask({taskEdit}) {
         const params = new URLSearchParams({
             id: taskEdit?.id,
             activity: activity,
-            rep_id : 18,
+            rep_id : user.client_id,
             ambassador_id : 19,
             location : location,
             notes : notes,

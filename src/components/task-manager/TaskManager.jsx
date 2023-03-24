@@ -10,6 +10,7 @@ import Export from '../../shared/table/Export';
 import EditTask from './EditTask';
 import { SuccessAlert, ValidationAlert } from '../../utils/alerts';
 import FilterTask from './FilterTask';
+import { useAuth } from '../../context/auth-context';
 
 function TaskManager() {
     //Task State 
@@ -22,6 +23,8 @@ function TaskManager() {
     const [show, setShow] = useState(false);
 
 
+    const { user } = useAuth()
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -30,7 +33,7 @@ function TaskManager() {
         console.log(selectedValue[0])
 
 		const params = new URLSearchParams({
-			rep_id: 18,
+			rep_id: user.client_id,
 			startDate: selectedValue[0] !== undefined ? selectedValue[0].toISOString().slice(0, 10) : ' ',
 			endDate: selectedValue[0] !== undefined ?  selectedValue[1].toISOString().slice(0, 10) : ' ',
             task_status: status

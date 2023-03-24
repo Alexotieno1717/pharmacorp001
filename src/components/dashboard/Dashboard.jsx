@@ -14,12 +14,12 @@ import Complete from './task-status/Complete';
 function Dashboard(){
 
   
-
   const { coords, getPosition, isGeolocationAvailable, isGeolocationEnabled, positionError} = useGeolocated({
     positionOptions: {
       enableHighAccuracy: false,
     },
     userDecisionTimeout: 5000,
+    suppressLocationOnMount: true,
   })
 
   //Range.
@@ -30,6 +30,7 @@ function Dashboard(){
   //const [value, onChange] = useState(new Date());
   const [taskSelected, setTaskSelected] = useState();
   const [totalExpenses, setTotalExpenses] = useState('');
+  const [loading, setLoading] = useState(false)
 
   // user state
   const { user } = useAuth();
@@ -66,7 +67,7 @@ const getTotalExpenses = () =>{
 
 const chooseStatusType = (data) =>{
   setTaskSelected(data)
-  console.log(data)
+  getPosition()
 }
 
 const handleComplete = async () => {
@@ -75,9 +76,13 @@ const handleComplete = async () => {
 
   getPosition()
 
+  setLoading(true)
   if(isGeolocationEnabled && isGeolocationAvailable) {
 
-    response = await axios.get(`${process.env.REACT_APP_API_URL}/verify-locale?rep_id=11&activity_id=${taskSelected.id}&lat=${coords.latitude}&long=${coords.longitude}`)
+    response = await axios.get(`${process.env.REACT_APP_API_URL}/verify-locale?rep_id=${user.client_id}&activity_id=${taskSelected.id}&lat=${coords.latitude}&long=${coords.longitude}`)
+  } else {
+    getPosition()
+    setLoading(false)
 
   }
   return response
@@ -144,7 +149,7 @@ const columns = [
                 {cell.row.original.status}
               </a>
 
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <li className='dropdown-item'
                  onClick={() => chooseStatusType(row.original)}>Revisits</li>
                 <li className='dropdown-item'
@@ -261,7 +266,7 @@ return (
 
     {/* Modals for status */}
     <Modal id="complete" label='Complete Task Review'>
-        <Complete handleComplete={handleComplete}/>
+        <Complete handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user}/>
     </Modal> 
 
 
