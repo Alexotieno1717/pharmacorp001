@@ -4,7 +4,7 @@ import './Modal.scss'
 const Modal = ({ id, label, children, ...rest } ) =>{
     const closeModal = useRef(null)
   return (
-    <div id={id} className="modal fade " role="dialog" aria-hidden="true" tabIndex={-1}>
+    <div id={id} className="modal fade" role="dialog" aria-hidden="true" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content bg-white">
                 <div className="modal-header">

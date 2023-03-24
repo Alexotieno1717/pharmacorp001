@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
 import './Sidebar.scss';
 
@@ -7,6 +7,9 @@ const Sidebar = () =>{
   const [menuState, setMenuState] = useState({});
 
   const { user } = useAuth();
+
+  // get current route
+  const location = useLocation();
 
   function toggleMenuState(newState) {
     if (menuState[newState]) {
@@ -67,7 +70,7 @@ return (
           {/* <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i> */}
         </a>
       </li>
-      <li className='nav-item'>
+      <li className={location.pathname === '/dashboard' ? 'nav-item active' : 'nav-item'}>
         <Link 
         // className="nav-link" 
         to="/dashboard"
@@ -78,35 +81,35 @@ return (
         </Link>
       </li>
 
-      <li className='nav-item'>
+      <li className={location.pathname === '/expenses' ? 'nav-item active' : 'nav-item'}>
         <Link className="nav-link" to="/expenses">
           <span className="menu-title">Expenses</span>
           <i className="mdi mdi-cash menu-icon"></i>
         </Link>
       </li>
 
-      <li className='nav-item'>
+      <li className={location.pathname === '/task-manager' ? 'nav-item active' : 'nav-item'}>
         <Link className="nav-link" to="/task-manager">
           <span className="menu-title">Task Manager</span>
           <i className="fa fa-tasks menu-icon"></i>
         </Link>
       </li>
 
-      <li className='nav-item'>
+      <li className={location.pathname === '/lead-generation' ? 'nav-item active' : 'nav-item'}>
         <Link className="nav-link" to="/lead-generation">
           <span className="menu-title">Lead Generation</span>
           <i className="fa fa-user-plus menu-icon"></i>
         </Link>
       </li>
 
-      <li className='nav-item'>
+      <li className={location.pathname === '/reference' ? 'nav-item active' : 'nav-item'}>
         <Link className="nav-link" to="/reference">
           <span className="menu-title">Reference</span>
           <i className="mdi mdi-link menu-icon"></i>
         </Link>
       </li>
 
-      <li className='nav-item'>
+      <li className={location.pathname === '/calendar' ? 'nav-item active' : 'nav-item'}>
         <Link className="nav-link" to="/calendar">
           <span className="menu-title">Calendar</span>
           <i className="mdi mdi-calendar menu-icon"></i>

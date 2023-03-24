@@ -61,7 +61,7 @@ function SignUp() {
             <div className="col-lg-4 mx-auto">
               <div className="auth-form-light text-left py-5 px-4 px-sm-5">
                 <div className="brand-logo">
-                    <h2 className="text-center">Pharmacorp</h2>
+                    <h2 className="text-center">Rep Connect</h2>
                 </div>
                 <h6 className="font-weight-light">Signing up is easy. It only takes a few steps</h6>
                 <form className="pt-3" onSubmit={(event) => onSubmitHandler(event)}>

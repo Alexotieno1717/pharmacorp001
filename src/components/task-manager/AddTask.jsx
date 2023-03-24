@@ -1,6 +1,7 @@
 import axios from 'axios'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
+import { useAuth } from '../../context/auth-context';
 import { SuccessAlert, ValidationAlert } from '../../utils/alerts';
 
 
@@ -10,10 +11,48 @@ function AddTask() {
 
   const [activity, setActivity] = useState('')
   const [activityType, setActivityType] = useState(options[0])
+  const [productId, setProductId] = useState('')
   const [location, setLocation] = useState('')
   const [notes, setNotes] = useState('')
   const [date, setDate] = useState('')
+  const [hcpId, setHcpId] = useState('')
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([])
+  const [clients, setClients] = useState([]);
+
+  // user state
+  const { user } = useAuth();
+
+  // console.log('getting user', user)
+
+  const fetchProducts = () =>{
+    axios.get(`${process.env.REACT_APP_API_URL}/fetch-products`)
+    .then((res) =>{
+      setProducts(res.data.data)
+      // console.log(res.data)
+    }).catch((err) =>{
+      console.log(err)
+    })
+  }
+
+  
+
+  useEffect(() => {
+    // Getting the HCP Name
+  const fetchClients = () =>{
+    axios.get(`${process.env.REACT_APP_API_URL}/fetch-clients`)
+    .then((res) =>{
+      setClients(res.data.data)
+      // console.log(res.data.data)
+    }).catch((err) =>{
+      console.log(err)
+    })
+  }
+
+    fetchProducts()
+    fetchClients();
+
+  }, [])
 
 
   function onSubmitHandler(event) {
@@ -23,11 +62,12 @@ function AddTask() {
     const params = new URLSearchParams({
       activity : activity,
       activity_type: activityType,
-      rep_id : 18,
-      ambassador_id : 19,
+      rep_id : user?.client_id,
+      ambassador_id : hcpId,
       location : location,
       notes : notes,
       scheduled_date: date,
+      product_id: productId
     }).toString()
 
     axios
@@ -51,8 +91,6 @@ function AddTask() {
     })
   }
 
-  
-
   return (
     <>
       <div className="container">
@@ -74,6 +112,28 @@ function AddTask() {
                     {options.map((value) =>(
                       <option value={value} key={value}>
                         {value}
+                      </option>
+                    ))}
+                  </select>
+              </div>
+              <div className="form-group">
+                  <label htmlFor="">HCP Name</label>
+                  <select className="form-control h-auto" onChange={(event) => setHcpId(event.target.value)} required>
+                    <option value="">Select Health Care Provider Name.....</option>
+                    {clients.map((client) => (
+                      <option key={client.id} value={client.id}>
+                        {client.name}
+                      </option>
+                    ))}
+                  </select>
+              </div>
+              <div className="form-group">
+                  <label htmlFor="">Product</label>
+                  <select className="form-control h-auto" onChange={(event) => setProductId(event.target.value)} required>
+                    <option value="">Select Product</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name}
                       </option>
                     ))}
                   </select>

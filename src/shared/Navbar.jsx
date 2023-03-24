@@ -3,6 +3,7 @@ import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { useAuth } from '../context/auth-context';
+import { useHistory } from 'react-router';
 
 
 const Navbar = () =>{
@@ -18,6 +19,8 @@ const Navbar = () =>{
 
   const {user} = useAuth()
 
+  const history = useHistory();
+
   // signout function
   const signOut = () =>{
     // remove token from localstorage
@@ -26,17 +29,20 @@ const Navbar = () =>{
     // clear current user profile
     setUser(null)
 
+    // Redirect the user to the login page
+    history.push('/auth/login');
+
   }
 
   return (
     <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
         <Link className="navbar-brand brand-logo" to="/">
-          Easy Sales 
+          Rep Connect 
           {/* <img src={require('../assets/images/logo.svg')} alt="logo" /> */}
           </Link>
         <Link className="navbar-brand brand-logo-mini" to="/">
-          E. S
+          R. C
           {/* <img src={require('../assets/images/logo-mini.svg')} alt="logo" /> */}
         </Link>
       </div>
@@ -78,7 +84,7 @@ const Navbar = () =>{
                   <Trans>Settings</Trans>
                 </Dropdown.Item>
                 <hr />
-                <Dropdown.Item href="!#" onClick={() => signOut()}>
+                <Dropdown.Item onClick={() => signOut()}>
                   <i className="mdi mdi-logout mr-2 text-primary"></i>
                   <Trans>Signout</Trans>
                 </Dropdown.Item>

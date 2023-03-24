@@ -28,6 +28,7 @@
     "react-data-table-component": "^7.5.3",
     "react-datepicker": "^4.10.0",
     "react-dom": "^18.2.0",
+    "react-geolocated": "^4.0.3",
     "react-i18next": "^12.1.4",
     "react-router": "^5.2.0",
     "react-router-dom": "^6.8.0",
@@ -38,7 +39,7 @@
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
-  "proxy": "http://161.35.6.91/pharmacorp/backend/web/index.php/",
+  "proxy": "be.instaloans.co.ke",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

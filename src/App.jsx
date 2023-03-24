@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './App.scss';
 import AppRoutes from './AppRoutes';
 import { ToastContainer } from 'react-toastify';
-import 'react-calendar/dist/Calendar.css';
 import { AuthContext } from './context/auth-context';
 import Spinner from './shared/Spinner';
 

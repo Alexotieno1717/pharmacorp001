@@ -9,6 +9,7 @@ import Table from '../../shared/table/Table';
 import Export from '../../shared/table/Export';
 import EditTask from './EditTask';
 import { SuccessAlert, ValidationAlert } from '../../utils/alerts';
+import FilterTask from './FilterTask';
 
 function TaskManager() {
     //Task State 
@@ -16,6 +17,55 @@ function TaskManager() {
     const [taskView, setTaskView] = useState({})
     const [taskEdit, setTaskEdit] = useState({})
     const [loading, setLoading] = useState(false);
+	const [status, setStatus] = useState("1");
+    const [selectedValue, setSelectedValue] = useState(new Date(), []);
+    const [show, setShow] = useState(false);
+
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleFilter = () => {
+		setLoading(true);
+        console.log(selectedValue[0])
+
+		const params = new URLSearchParams({
+			rep_id: 18,
+			startDate: selectedValue[0] !== undefined ? selectedValue[0].toISOString().slice(0, 10) : ' ',
+			endDate: selectedValue[0] !== undefined ?  selectedValue[1].toISOString().slice(0, 10) : ' ',
+            task_status: status
+		}).toString();
+
+		axios
+			.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
+			.then((response) => {
+				if (response.data.status === false) {
+					ValidationAlert(response.data.status_message);
+				} else {
+
+                    // Alert Message success
+                    SuccessAlert(response.data.status_message);
+                    setTasks(response.data.data)
+
+                }
+				// turn off loading
+				setLoading(false);
+
+                // close modal
+                setShow(false)
+			})
+			.catch((err) => {
+				// turn off loading
+				setLoading(false);
+
+                // close modal
+                setShow(false)
+				console.log(err);
+			});
+    }
+    
+
+
     // const [pageCount, setPageCount] = useState(0);
 
     // use effect to fetch content on page mount
@@ -108,7 +158,7 @@ function TaskManager() {
             minWidth: 200,
           },
          {
-           Header: 'Ambassador Name',
+           Header: 'HCP Name',
            accessor: 'ambassador_name',
            style: tableStyles.style,
            minWidth: 200,
@@ -181,6 +231,8 @@ function TaskManager() {
                         }
                     />
                     {/* End Add Member Button */}
+                        <button className='btn btn-info text-white mb-5 me-0 ms-3' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
+                        </i>Filter Tasks</span>}</button>
                 </div>
                 <div className="col-md-6">
                     {/* Export Data Button */}
@@ -209,7 +261,18 @@ function TaskManager() {
         </Modal> 
         <Modal id="edit" label='Edit a Task'>
             <EditTask taskEdit={taskEdit} />
-        </Modal> 
+        </Modal>
+        {/* Filter Task */}
+        <FilterTask
+            filterTask={setTasks}
+            show={show} 
+            handleClose={handleClose}
+            handleFilter={handleFilter}
+            selectedValue={selectedValue}
+            setSelectedValue={setSelectedValue}
+            loading={loading}
+            status={status}
+            setStatus={setStatus}/> 
     </> 
   )
 }

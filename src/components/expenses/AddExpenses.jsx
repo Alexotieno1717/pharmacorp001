@@ -28,12 +28,13 @@ function AddExpenses(){
         .then(
             (data) =>{
                 if (data.status === false) {
-                    ValidationAlert(data.data.status_message)
+                    ValidationAlert(data.status_message)
                 }
+                // console.log(data)
                 // turn off loading
                 setLoading(false);
                 //Alert Message success
-                SuccessAlert(data.data.status_message)
+                SuccessAlert(data.status_message)
                 window.location.href = '/expenses';
             },
             // Catch errors
