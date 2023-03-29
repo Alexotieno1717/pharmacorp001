@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, DropdownButton, Form, InputGroup } from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useAuth } from '../../context/auth-context';
@@ -89,6 +88,22 @@ function Dashboard() {
     return response
   }
 
+  const getButtonColor = (status) =>{
+    switch (status) {
+      case 'completed':
+        return "btn-success";
+
+      case 'cancelled':
+        return "btn-danger";
+
+      case 'revisit':
+        return "btn-info";
+
+      default:
+          return "btn-dark";
+    }
+  }
+
 
   // Table styles
   const tableStyles = {
@@ -138,53 +153,54 @@ function Dashboard() {
     {
       Header: "Status",
       accessor: "status",
-      Cell: ({ cell, row, data }) => {
-        return (
-          <div>
-            <div className="dropdown">
-              <a className="btn btn-sm btn-dark dropdown-toggle" href="#kk" role="button"
-                id="dropdownMenuLink"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {cell.row.original.status}
-              </a>
+      Cell: ({ cell, row }) => {
+        return <div>
+          <div className="dropdown">
+            {/* eslint-disable-next-line no-restricted-globals */}
+            <a className={`btn btn-sm dropdown-toggle ${getButtonColor(cell.row.original.status)}`}
+               href="#" role="button"
+              id="dropdownMenuLink"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
 
-              <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li className='dropdown-item'
-                  onClick={() => chooseStatusType(row.original)}>
-                  <ModalIcon
-                    target="revisits"
-                    label={<span className="text-dark">
-                      Revisits
-                    </span>
-                    }
-                  />
-                </li>
-                <li className='dropdown-item'
-                  onClick={() => chooseStatusType(row.original)}>
-                  <ModalIcon
-                    target="complete"
-                    label={<span className="text-dark">
-                      Complete
-                    </span>
-                    }
-                  />
-                </li>
-                <li className='dropdown-item'
-                  onClick={() => chooseStatusType(row.original)}>
-                  <ModalIcon
-                    target="cancel"
-                    label={<span className="text-dark">
-                      Cancel
-                    </span>
-                    }
-                  />
-                </li>
-              </ul>
-            </div>
+            >
+              {cell.row.original.status}
+            </a>
+
+            <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li className='dropdown-item'
+                onClick={() => chooseStatusType(row.original)}>
+                <ModalIcon
+                  target="revisits"
+                  label={<span className="text-dark">
+                    Revisits
+                  </span>
+                  }
+                />
+              </li>
+              <li className='dropdown-item'
+                onClick={() => chooseStatusType(row.original)}>
+                <ModalIcon
+                  target="complete"
+                  label={<span className="text-dark">
+                    Complete
+                  </span>
+                  }
+                />
+              </li>
+              <li className='dropdown-item'
+                onClick={() => chooseStatusType(row.original)}>
+                <ModalIcon
+                  target="cancel"
+                  label={<span className="text-dark">
+                    Cancel
+                  </span>
+                  }
+                />
+              </li>
+            </ul>
           </div>
-        );
+        </div>;
       },
     }
   ]
