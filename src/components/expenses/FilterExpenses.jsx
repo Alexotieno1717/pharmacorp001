@@ -43,6 +43,7 @@ function FilterExpenses({ filterExpenses, loading, show, handleClose, handleFilt
 						selectRange
 						onChange={setSelectedValue}
 						value={selectedValue}
+						className="mx-auto"
 					/>
 				</Modal.Body>
 				<Modal.Footer>
