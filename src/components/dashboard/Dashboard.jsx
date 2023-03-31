@@ -30,7 +30,13 @@ function Dashboard() {
   //const [value, onChange] = useState(new Date());
   const [taskSelected, setTaskSelected] = useState();
   const [totalExpenses, setTotalExpenses] = useState('');
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [revisitsStatus, setRevisitsStatus] = useState({})
+  const [completeStatus, setCompleteStatus] = useState({})
+
+  // Dates
+  const newDate = new Date();
+  console.log(newDate);
 
   // user state
   const { user } = useAuth();
@@ -50,7 +56,42 @@ function Dashboard() {
 
     getActivity();
     getTotalExpenses();
+    getRevisitTasks()
+    getCompletedTasks()
   }, [])
+
+  const getRevisitTasks = () =>{
+    // Axios Fetch total Revisits
+
+    const params = new URLSearchParams({
+      rep_id: user.client_id,
+      start_date: newDate,
+      task_status: 3
+    }).toString()
+    axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
+        .then((res) => {
+          // console.log(res.data.data)
+          setRevisitsStatus(res.data.data)
+        }).catch((err) =>{
+          console.log(err);
+    })
+  }
+  const getCompletedTasks = () =>{
+    // Axios Fetch total Complete Task
+
+    const params = new URLSearchParams({
+      rep_id: user.client_id,
+      start_date: newDate,
+      task_status: 2
+    }).toString()
+    axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
+        .then((res) => {
+          console.log(res.data.data)
+          setCompleteStatus(res.data.data)
+        }).catch((err) =>{
+      console.log(err);
+    })
+  }
 
   // Getting total Expenses
   const getTotalExpenses = () => {
@@ -234,9 +275,9 @@ function Dashboard() {
               <div className="card bg-gradient-danger card-img-holder text-white">
                 <div className="card-body">
                   <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
-                  <h4 className="font-weight-normal mb-3">Monthly Expenses <i className="mdi mdi-chart-line mdi-24px float-right" />
+                  <h4 className="font-weight-normal mb-3">Daily Expenses <i className="mdi mdi-chart-line mdi-24px float-right" />
                   </h4>
-                  <h2 className="mb-5">{totalExpenses}</h2>
+                  <h2 className="mb-5">{totalExpenses > 1 ? totalExpenses : '0'}</h2>
                 </div>
               </div>
             </div>
@@ -246,7 +287,7 @@ function Dashboard() {
                   <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
                   <h4 className="font-weight-normal mb-3">Today's Revisits <i className="mdi mdi-bookmark-outline mdi-24px float-right" />
                   </h4>
-                  <h2 className="mb-5">20 / 45</h2>
+                  <h2 className="mb-5">{revisitsStatus.total_activities}</h2>
                 </div>
               </div>
             </div>
@@ -256,7 +297,7 @@ function Dashboard() {
                   <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
                   <h4 className="font-weight-normal mb-3">Completed Task <i className="mdi mdi-diamond mdi-24px float-right"></i>
                   </h4>
-                  <h2 className="mb-5">95,5741</h2>
+                  <h2 className="mb-5">{completeStatus.total_activities}</h2>
                 </div>
               </div>
             </div>
