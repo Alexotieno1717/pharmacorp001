@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Spinner } from 'react-bootstrap';
-import { SuccessAlert, ValidationAlert } from '../../utils/alerts';
+import {ErrorAlert, SuccessAlert, ValidationAlert} from '../../utils/alerts';
+import {useAuth} from "../../context/auth-context";
 
 function AddExpenses(){
 
@@ -8,6 +9,12 @@ function AddExpenses(){
     const [amount, setAmount] = useState('')
     const [photo, setPhoto] = useState('')
     const [loading, setLoading] = useState(false);
+
+    // State to check Max size of photo uploaded
+    const MAX_FILE_SIZE = 1024 * 1024; // 1 MB
+
+    // Fetching user from Context
+    const { user } = useAuth();
 
 
     async function onSubmitHandler(event) {
@@ -46,6 +53,18 @@ function AddExpenses(){
         )
       }
 
+      const handleFileUpload = (event) =>{
+        const uploadFile = event.target.files[0]
+        if (uploadFile && uploadFile.size <= MAX_FILE_SIZE){
+            setPhoto(uploadFile)
+        }else{
+            alert(`File size should be less than ${MAX_FILE_SIZE / 1024} KB`);
+            event.target.value = null;
+            setPhoto('');
+        }
+      }
+
+
     return (
         <>
             <div className="container-fluid">
@@ -54,14 +73,13 @@ function AddExpenses(){
                         <div className="col-md-6">
                             Upload Receipt Image
 
-                            <input type="file" accept="image/*" onChange={(event) =>{
-                                console.log(event.target.files[0]);
-                                setPhoto(event.target.files[0])
-                            }} />
+                            <input type="file" accept="image/*" className='form-control mt-3' onChange={handleFileUpload} required />
+
+                            {photo && <p className='mt-4'>File name: {photo.name}</p>}
                         </div>
                         <div className="col-md-6">
                         <div className="form-group">
-                                <label htmlFor="">User Name : Dr. Steve Nyamu</label>
+                                <label htmlFor="">User Name : {user.names}</label>
                                 <input type="hidden" className="form-control h-auto" placeholder="Task name" />
                             </div>
                             <div className="form-group">
@@ -76,7 +94,7 @@ function AddExpenses(){
                             <button 
                                 type="submit" 
                                 className='btn btn-info w-100'
-                                disabled={loading ? true: false}>
+                                disabled={loading}>
                                 {loading ? <Spinner color={'#fff'}/> : 'UPLOAD RECEIPT'}</button>
                             </div>
                         </div>
