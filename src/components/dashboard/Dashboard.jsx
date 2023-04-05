@@ -11,6 +11,7 @@ import { useGeolocated } from 'react-geolocated';
 import Complete from './task-status/Complete';
 import Revisits from "./task-status/Revisits";
 import Cancel from "./task-status/Cancel";
+import ColumnFilter from "../../shared/table/ColumnFilter";
 
 function Dashboard() {
 
@@ -36,7 +37,7 @@ function Dashboard() {
 
   // Dates
   const newDate = new Date();
-  console.log(newDate);
+  console.log(newDate.toDateString());
 
   // user state
   const { user } = useAuth();
@@ -65,12 +66,12 @@ function Dashboard() {
 
     const params = new URLSearchParams({
       rep_id: user.client_id,
-      start_date: newDate,
+      start_date: newDate.toDateString(),
       task_status: 3
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
         .then((res) => {
-          // console.log(res.data.data)
+          // console.log('getting revisits', res.data)
           setRevisitsStatus(res.data.data)
         }).catch((err) =>{
           console.log(err);
@@ -86,7 +87,7 @@ function Dashboard() {
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
         .then((res) => {
-          console.log(res.data.data)
+          // console.log('getting completed tasks', res.data)
           setCompleteStatus(res.data.data)
         }).catch((err) =>{
       console.log(err);
@@ -166,30 +167,35 @@ function Dashboard() {
           </div>
         );
       },
+      Filter: ColumnFilter,
     },
     {
       Header: 'Activity Name',
       accessor: 'activity_name',
       style: tableStyles.style,
       minWidth: 200,
+      Filter: ColumnFilter,
     },
     {
       Header: 'HCP Name',
       accessor: 'ambassador_name',
       style: tableStyles.style,
       minWidth: 200,
+      Filter: ColumnFilter,
     },
     {
       Header: 'Location',
       accessor: 'location',
       style: tableStyles.style,
       minWidth: 200,
+      Filter: ColumnFilter,
     },
     {
       Header: 'Product ID ',
       accessor: 'product_id',
       style: tableStyles.style,
       minWidth: 200,
+      Filter: ColumnFilter,
     },
     {
       Header: "Status",
@@ -287,7 +293,7 @@ function Dashboard() {
                   <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
                   <h4 className="font-weight-normal mb-3">Today's Revisits <i className="mdi mdi-bookmark-outline mdi-24px float-right" />
                   </h4>
-                  <h2 className="mb-5">{revisitsStatus.total_activities}</h2>
+                  <h2 className="mb-5">{revisitsStatus > 1 ? revisitsStatus.total_activities : '0'}</h2>
                 </div>
               </div>
             </div>
@@ -297,7 +303,7 @@ function Dashboard() {
                   <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
                   <h4 className="font-weight-normal mb-3">Completed Task <i className="mdi mdi-diamond mdi-24px float-right"></i>
                   </h4>
-                  <h2 className="mb-5">{completeStatus.total_activities}</h2>
+                  <h2 className="mb-5">{completeStatus > 1 ? completeStatus.total_activities : '0'}</h2>
                 </div>
               </div>
             </div>
