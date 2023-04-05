@@ -23,7 +23,7 @@ function OTP() {
     //loading state
     const [loading, setLoading] = useState(false);
 
-    // if theres no client navigate back to login
+    // if there's no client navigate back to log in
     if (!data) {
         return <Navigate to={'/auth/login'} replace />;
     }
