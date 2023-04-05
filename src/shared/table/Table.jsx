@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Spinner } from 'react-bootstrap';
-import { usePagination, useTable } from 'react-table';
+import { useTable, usePagination, useFilters } from 'react-table';
 import EmptyState from './EmptyState';
 import './Table.scss'
 
@@ -23,8 +23,10 @@ const Table = ({columns, data, loading,getTrProps}) => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize }, } = useTable({columns, data, initialState: { pageIndex: 0 }
-    }, 
-      usePagination
+    },
+        useFilters,
+      usePagination,
+
     )
 
     // loader
@@ -40,6 +42,7 @@ const Table = ({columns, data, loading,getTrProps}) => {
       //},3000)
     }
 
+
     return (
       <>
       {loading && (
@@ -51,7 +54,12 @@ const Table = ({columns, data, loading,getTrProps}) => {
               {headerGroups.map((headerGroup, index) => (
                 <tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers.map((column, index )=> (
-                    <th {...column.getHeaderProps()} key={index}>{column.render('Header')}</th>
+                    <th {...column.getHeaderProps()} key={index}>
+                        {column.render('Header')}
+                        <div>
+                            {/*{column.canFilter ? column.render('Filter') : null}*/}
+                        </div>
+                    </th>
                   ))}
                 </tr>
               ))}
