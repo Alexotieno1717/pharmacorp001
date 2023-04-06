@@ -68,23 +68,31 @@ function Expenses() {
 
     const navigate = useNavigate();
 
+    // Dates
+    const newDate = new Date();
+
     useEffect(() => {
         getExpenses();
-    }, [])
+    }, [getExpenses])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     function getExpenses() {
+        const params = new URLSearchParams({
+            rep_id: user.client_id,
+            start_date: newDate.toDateString(),
+        }).toString()
         axios
-            .get(`${process.env.REACT_APP_API_URL}/fetch-expenses?rep_id=18`)
+            .get(`${process.env.REACT_APP_API_URL}/fetch-expenses?${params}`)
             .then((response) => {
                 setExpenses(response.data.data)
-                // console.log(response.data.data)
+                console.log(response.data)
             }).catch((err) => {
                 console.log(err)
             })
     }
 
     const ViewExpensesById = (id) => {
-        // Axio API for View Expenses
+        // Axios API for View Expenses
         axios
             .get(`${process.env.REACT_APP_API_URL}/get-expense?expense_id=${id}`)
             .then((res) => {
@@ -110,6 +118,11 @@ function Expenses() {
             })
 
     }
+
+    // is user doesn't exist it will redirect
+  if (!user) {
+    return window.location.href = '/auth/login';
+  }
 
     // Table styles
     const tableStyles = {
@@ -217,7 +230,7 @@ function Expenses() {
                     </div>
                     <div className="col-md-6">
                         {/* Export Data Button */}
-                        <Export data={expenses} label="Expenses" disabled={expenses.length < 1 ? true : false} />
+                        <Export data={expenses} label="Expenses" disabled={expenses < 1}/>
                         {/* End Export Data Button */}
                     </div>
                 </div>
@@ -227,7 +240,7 @@ function Expenses() {
                         <div className="col-md-12">
                             <Table
                                 columns={columns}
-                                data={expenses}
+                                data={ expenses }
                                 padeIndex={0}
                             />
                         </div>
