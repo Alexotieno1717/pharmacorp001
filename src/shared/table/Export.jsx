@@ -23,7 +23,7 @@ const Export = ({data, label, disabled, ...props}) => {
 
     }
 
-    // function to download excel file
+    // function to download Excel file
     const downloadExcel = (data) => {
         const worksheet = XLSX.utils.json_to_sheet(data);
         const workbook =  XLSX.utils.book_new();
