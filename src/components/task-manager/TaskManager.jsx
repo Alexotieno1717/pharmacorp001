@@ -79,7 +79,7 @@ function TaskManager() {
 
             // axios fetch all task
             axios
-            .get(`${process.env.REACT_APP_API_URL}/fetch-activities`)
+            .get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}`)
             .then((response) => {
                 // console.log(response.data.activities)
                 setTasks(response.data.activities)
@@ -124,6 +124,11 @@ function TaskManager() {
         })
     
         
+    }
+
+    // is user doesn't exist it will redirect
+    if (!user) {
+        return window.location.href = '/auth/login';
     }
     
 
