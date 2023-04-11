@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import { Spinner } from 'react-bootstrap';
 import {ErrorAlert, SuccessAlert, ValidationAlert} from '../../utils/alerts';
 import {useAuth} from "../../context/auth-context";
+import axios from "axios";
 
 function AddExpenses(){
 
@@ -9,6 +10,8 @@ function AddExpenses(){
     const [amount, setAmount] = useState('')
     const [photo, setPhoto] = useState('')
     const [loading, setLoading] = useState(false);
+    const [activities, setActivities] = useState([])
+    const [getActivityId, setGetActivityId] = useState('')
 
     // State to check Max size of photo uploaded
     const MAX_FILE_SIZE = 1024 * 1024; // 1 MB
@@ -22,7 +25,7 @@ function AddExpenses(){
         setLoading(true);
 
         const formData = new FormData();
-        formData.append("activity_id", "23");
+        formData.append("activity_id", getActivityId);
         formData.append("location", location)
         formData.append("amount", amount);
         formData.append("photo", photo);
@@ -64,6 +67,20 @@ function AddExpenses(){
         }
       }
 
+      useEffect(() =>{
+          const getAllActivity = () => {
+              axios.get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}`)
+                  .then((res) => {
+                      console.log(res.data.activities)
+                      setActivities(res.data.activities)
+                  }).catch((err) =>{
+                      console.log(err)
+              })
+          }
+
+          getAllActivity();
+      }, [user.client_id])
+
 
     return (
         <>
@@ -77,10 +94,21 @@ function AddExpenses(){
 
                             {photo && <p className='mt-4'>File name: {photo.name}</p>}
                         </div>
-                        <div className="col-md-6">
-                        <div className="form-group">
+                        <div className="col-md-6 mt-3">
+                            <div className="form-group">
                                 <label htmlFor="">User Name : {user.names}</label>
                                 <input type="hidden" className="form-control h-auto" placeholder="Task name" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="">Activity Type:</label>
+                                <select className="form-control h-auto" onChange={(event) => setGetActivityId(event.target.value)} required>
+                                    <option value="">Select Activity type.....</option>
+                                    {activities.map((activity) => (
+                                        <option key={activity.id} value={activity.id}>
+                                            {activity.activity_name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="">Amount:</label>
