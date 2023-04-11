@@ -47,7 +47,7 @@ function Dashboard() {
     const getActivity = () => {
       // axios fetch all task
       axios
-        .get(`${process.env.REACT_APP_API_URL}/fetch-activities`)
+        .get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}`)
         .then((response) => {
           setTasks(response.data.activities)
         }).catch((err) => {
@@ -275,7 +275,7 @@ function Dashboard() {
         </nav>
       </div>
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div className="row">
             <div className="col-md-4 stretch-card grid-margin">
               <div className="card bg-gradient-danger card-img-holder text-white">
@@ -311,10 +311,10 @@ function Dashboard() {
           </div>
         </div>
         {/* Calendar */}
-        <div className="col-md-4">
-          <Calendar selectRange onChange={setSelectedValue} value={selectedValue} />
-          {/* <DatePicker inline selected={dateTime}  onChange={handleChange()}/> */}
-        </div>
+        {/*<div className="col-md-4">*/}
+        {/*  <Calendar selectRange onChange={setSelectedValue} value={selectedValue} />*/}
+        {/*</div>*/}
+
       </div>
 
       <div className="row">
@@ -354,8 +354,6 @@ function Dashboard() {
       <Modal id="cancel" label='Cancel Task Review'>
         <Cancel handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} />
       </Modal>
-
-
 
     </div>
   );
