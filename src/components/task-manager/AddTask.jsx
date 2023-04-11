@@ -23,8 +23,6 @@ function AddTask() {
   // user state
   const { user } = useAuth();
 
-  // console.log('getting user', user)
-
   const fetchProducts = () =>{
     axios.get(`${process.env.REACT_APP_API_URL}/fetch-products`)
     .then((res) =>{
