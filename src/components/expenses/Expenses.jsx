@@ -85,7 +85,7 @@ function Expenses() {
             .get(`${process.env.REACT_APP_API_URL}/fetch-expenses?${params}`)
             .then((response) => {
                 setExpenses(response.data.data)
-                console.log(response.data)
+                // console.log(response.data)
             }).catch((err) => {
                 console.log(err)
             })
