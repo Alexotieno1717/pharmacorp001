@@ -15,7 +15,7 @@ module.exports = function (app) {
     );
     app.use(
         createProxyMiddleware('/api2', {
-            target: "https://pharmacop-backend-proxy.fly.dev/api-proxy/",
+            target: "https://pharmacop-backend-proxy.fly.dev",
             changeOrigin: true,
             pathRewrite: {
                 "^/api2": "",

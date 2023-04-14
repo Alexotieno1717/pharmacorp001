@@ -31,7 +31,7 @@ function AddExpenses() {
         formData.append("photo", photo);
 
 
-        await fetch(`${process.env.REACT_APP_API_URL_PROXY}/add-expense`, {
+        await fetch(`${process.env.REACT_APP_API_URL_PROXY}/api-proxy/add-expense`, {
             method: 'POST',
             body: formData,
         }).then(res => res.json())

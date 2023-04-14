@@ -1,7 +1,7 @@
 import React from 'react'
 
 function ViewExpenses({expenseView}) {
-    const img = `http://161.35.6.91/pharmacorp/backend/web/uploads/${expenseView?.expense?.file_path}`
+    const img = `${process.env.REACT_APP_API_URL_PROXY}/image-api-proxy/${expenseView?.expense?.file_path}`
   return (
     <div className='container m-2'>
         <div className="row">
