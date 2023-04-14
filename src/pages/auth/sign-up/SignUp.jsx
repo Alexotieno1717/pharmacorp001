@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { SuccessAlert } from '../../../utils/alerts';
+import { SuccessAlert, ValidationAlert } from '../../../utils/alerts';
 
 function SignUp() {
 
@@ -35,17 +35,22 @@ function SignUp() {
         axios
         .post(`${process.env.REACT_APP_API_URL}/sign-up?${params}`)
         .then((res)=>{
+          if (res.data.status === false) {
             // turn off loading
             setLoading(false);
-
             setError(res.data.status_message)
+            ValidationAlert(res.data.status_message)
+            navigate('/auth/sign-up')
 
-            console.log(res.data)
-            console.log(`${process.env.REACT_APP_API_URL}/sign-up?${params}`)
+          }else{
+            // turn off loading
+            setLoading(false);
+            // Success Alert Message
             SuccessAlert(res.data.status_message)
 
             // direct to login
             navigate('/auth/login');
+          }            
         }).catch((err) => {
             // turn off loading
             setLoading(false);
@@ -95,14 +100,8 @@ function SignUp() {
                   <div className="form-group">
                     <input type="password" className="form-control form-control-sm" id="password" placeholder="Password" onChange={(event) =>  setPassword(event.target.value)} />
                   </div>
-                  <div className="mb-4">
-                    <div className="form-check">
-                      <label className="form-check-label text-muted">
-                        <input type="checkbox" className="form-check-input" />
-                        <i className="input-helper"></i>
-                        I agree to all Terms & Conditions
-                      </label>
-                    </div>
+                  <div>
+                      {error && (<p className='text-danger'>{error}</p>)}
                   </div>
                   <button 
                         type="submit" 

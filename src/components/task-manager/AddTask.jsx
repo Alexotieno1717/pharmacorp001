@@ -152,7 +152,7 @@ function AddTask() {
               <button 
                 type="submit" 
                 className='btn btn-info w-100'
-                disabled={loading ? true: false}>
+                disabled={loading}>
                 {loading ? <Spinner color={'#fff'}/> : 'Create Task'}</button>
               </div>
           </form>

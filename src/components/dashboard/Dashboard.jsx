@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useAuth } from '../../context/auth-context';
 import Modal from '../../shared/Modal/Modal';
@@ -12,6 +11,10 @@ import Complete from './task-status/Complete';
 import Revisits from "./task-status/Revisits";
 import Cancel from "./task-status/Cancel";
 import ColumnFilter from "../../shared/table/ColumnFilter";
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css';
+
 
 function Dashboard() {
 
@@ -23,9 +26,6 @@ function Dashboard() {
     suppressLocationOnMount: true,
   })
 
-  //Range.
-  const [selectedValue, setSelectedValue] = useState(new Date(), []);
-
   //Task State 
   const [tasks, setTasks] = useState([])
   //const [value, onChange] = useState(new Date());
@@ -34,6 +34,9 @@ function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [revisitsStatus, setRevisitsStatus] = useState({})
   const [completeStatus, setCompleteStatus] = useState({})
+  const [searchInput, setSearchInput] = useState('')
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
 
   // Dates
   const newDate = new Date();
@@ -41,6 +44,19 @@ function Dashboard() {
 
   // user state
   const { user } = useAuth();
+
+  //React Date Range Dates
+  // const selectionRange = {
+  //   startDate: startDate,
+  //   endDate: endDate,
+  //   key: 'selection',
+  // }
+  
+  // const handleSelect = (ranges) => {
+  //   setStartDate(ranges.selection.startDate)
+  //   setEndDate(ranges.selection.endDate)
+
+  // }
 
   // use effect to fetch content on page mount
   useEffect(() => {
@@ -66,12 +82,12 @@ function Dashboard() {
 
     const params = new URLSearchParams({
       rep_id: user.client_id,
-      start_date: newDate.toDateString(),
+      start_date: newDate,
       task_status: 3
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
         .then((res) => {
-          // console.log('getting revisits', res.data)
+          console.log('getting revisits', res.data)
           setRevisitsStatus(res.data.data)
         }).catch((err) =>{
           console.log(err);
@@ -110,6 +126,11 @@ function Dashboard() {
   const chooseStatusType = (data) => {
     setTaskSelected(data)
     getPosition()
+  }
+
+  // Choose status type without position
+  const chooseStatusTypeWithoutPosition = (data) => {
+    setTaskSelected(data)
   }
 
   const handleComplete = async () => {
@@ -205,7 +226,7 @@ function Dashboard() {
           <div className="dropdown">
             {/* eslint-disable-next-line no-restricted-globals */}
             <a className={`btn btn-sm dropdown-toggle ${getButtonColor(cell.row.original.status)}`}
-               href="#" role="button"
+               href="sss" role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -216,7 +237,7 @@ function Dashboard() {
 
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
               <li className='dropdown-item'
-                onClick={() => chooseStatusType(row.original)}>
+                onClick={() => chooseStatusTypeWithoutPosition(row.original)}>
                 <ModalIcon
                   target="revisits"
                   label={<span className="text-dark">
@@ -236,7 +257,7 @@ function Dashboard() {
                 />
               </li>
               <li className='dropdown-item'
-                onClick={() => chooseStatusType(row.original)}>
+                onClick={() => chooseStatusTypeWithoutPosition(row.original)}>
                 <ModalIcon
                   target="cancel"
                   label={<span className="text-dark">
@@ -263,13 +284,13 @@ function Dashboard() {
     <div>
       <div className="page-header">
         <h3 className="page-title">
-          <span className="page-title-icon bg-gradient-primary text-white mr-2">
+          <span className="page-title-icon bg-info text-white mr-2">
             <i className="mdi mdi-home" />
           </span> Dashboard </h3>
         <nav aria-label="breadcrumb">
           <ul className="breadcrumb">
             <li className="breadcrumb-item active" aria-current="page">
-              <span />Overview <i className="mdi mdi-alert-circle-outline icon-sm text-primary align-middle" />
+              <span />Overview <i className="mdi mdi-alert-circle-outline icon-sm text-info align-middle" />
             </li>
           </ul>
         </nav>
@@ -293,7 +314,7 @@ function Dashboard() {
                   <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
                   <h4 className="font-weight-normal mb-3">Today's Revisits <i className="mdi mdi-bookmark-outline mdi-24px float-right" />
                   </h4>
-                  <h2 className="mb-5">{revisitsStatus > 1 ? revisitsStatus.total_activities : '0'}</h2>
+                  <h2 className="mb-5">{revisitsStatus?.total_activities || '0'}</h2>
                 </div>
               </div>
             </div>
@@ -303,18 +324,13 @@ function Dashboard() {
                   <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
                   <h4 className="font-weight-normal mb-3">Completed Task <i className="mdi mdi-diamond mdi-24px float-right"></i>
                   </h4>
-                  <h2 className="mb-5">{completeStatus > 1 ? completeStatus.total_activities : '0'}</h2>
+                  <h2 className="mb-5">{completeStatus?.total_activities || '0'}</h2>
                 </div>
               </div>
             </div>
 
           </div>
         </div>
-        {/* Calendar */}
-        {/*<div className="col-md-4">*/}
-        {/*  <Calendar selectRange onChange={setSelectedValue} value={selectedValue} />*/}
-        {/*</div>*/}
-
       </div>
 
       <div className="row">
@@ -323,18 +339,43 @@ function Dashboard() {
             <div className="card-body">
               <div className="table-responsive">
                 <div className="row mb-3">
-                  <div className="col-md-6">
+                  <div className="col-md-4">
                     <h4 className="mt-3">Today's Tasks</h4>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-4">
+                   {/* Search & Filter by dates */}
+                    <input
+                        type='text'
+                        className='form-control h-auto rounded-5'
+                        placeholder="Search today's task by activity name"
+                        value={searchInput}
+                        onChange={(event) => setSearchInput(event.target.value)}
+                    />
+                  </div>
+                  <div className="col-md-4">
                     {/* Export Data Button */}
                     <Export data={tasks} label="Tasks" disabled={tasks.length < 1} />
                     {/* End Export Data Button */}
                   </div>
                 </div>
+                <div className="col-md-2" />
+                <div className="col-md-6 flex flex-column mx-auto">
+                  {searchInput && (
+                      <div className='flex flex-column mx-auto'>
+                        {/* <DateRangePicker
+                            ranges={[selectionRange]}
+                            minDate={new Date()}
+                            onChange={handleSelect}
+                        /> */}
+                      </div>
+                  )}
+                </div>
+
                 <Table
                   columns={columns}
-                  data={tasks}
+                  data={tasks.filter((row) =>
+                      row.activity_name.toLowerCase().includes(searchInput.toLowerCase())
+                  )}
                   padeIndex={0}
                 />
               </div>

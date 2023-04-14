@@ -33,8 +33,8 @@ function Expenses() {
 
         const params = new URLSearchParams({
             rep_id: user.client_id,
-            startDate: selectedValue[0] !== undefined ?  selectedValue[0].toISOString().slice(0, 10) : ' ',
-            endDate: selectedValue[0] !== undefined ?  selectedValue[1].toISOString().slice(0, 10) : ' ',
+            startDate: selectedValue[0] !== undefined ? selectedValue[0].toISOString().slice(0, 10) : ' ',
+            endDate: selectedValue[0] !== undefined ? selectedValue[1].toISOString().slice(0, 10) : ' ',
         }).toString();
 
         axios
@@ -73,7 +73,7 @@ function Expenses() {
 
     useEffect(() => {
         getExpenses();
-    }, [getExpenses])
+    }, [])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     function getExpenses() {
@@ -84,8 +84,11 @@ function Expenses() {
         axios
             .get(`${process.env.REACT_APP_API_URL}/fetch-expenses?${params}`)
             .then((response) => {
-                setExpenses(response.data.data)
-                // console.log(response.data)
+                if (response.data.status === false) {
+                    ValidationAlert(response.data.status_message)
+                } else {
+                    setExpenses(response.data.data)
+                }
             }).catch((err) => {
                 console.log(err)
             })
@@ -120,9 +123,9 @@ function Expenses() {
     }
 
     // is user doesn't exist it will redirect
-  if (!user) {
-    return window.location.href = '/auth/login';
-  }
+    if (!user) {
+        return window.location.href = '/auth/login';
+    }
 
     // Table styles
     const tableStyles = {
@@ -230,7 +233,7 @@ function Expenses() {
                     </div>
                     <div className="col-md-6">
                         {/* Export Data Button */}
-                        <Export data={expenses} label="Expenses" disabled={expenses < 1}/>
+                        <Export data={expenses} label="Expenses" disabled={expenses < 1} />
                         {/* End Export Data Button */}
                     </div>
                 </div>
@@ -240,7 +243,7 @@ function Expenses() {
                         <div className="col-md-12">
                             <Table
                                 columns={columns}
-                                data={ expenses }
+                                data={expenses}
                                 padeIndex={0}
                             />
                         </div>

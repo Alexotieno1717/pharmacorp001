@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap';
-import {ErrorAlert, SuccessAlert, ValidationAlert} from '../../utils/alerts';
-import {useAuth} from "../../context/auth-context";
+import { SuccessAlert, ValidationAlert } from '../../utils/alerts';
+import { useAuth } from "../../context/auth-context";
 import axios from "axios";
 
-function AddExpenses(){
+function AddExpenses() {
 
     const [location, setLocation] = useState('')
     const [amount, setAmount] = useState('')
@@ -30,56 +30,62 @@ function AddExpenses(){
         formData.append("amount", amount);
         formData.append("photo", photo);
 
-       
-        await fetch(`${process.env.REACT_APP_API_URL}/add-expense`, {
+
+        await fetch(`${process.env.REACT_APP_API_URL_PROXY}/add-expense`, {
             method: 'POST',
             body: formData,
-        }).then(res=> res.json())
-        .then(
-            (data) =>{
-                if (data.status === false) {
-                    ValidationAlert(data.status_message)
-                }
-                // console.log(data)
-                // turn off loading
-                setLoading(false);
-                //Alert Message success
-                SuccessAlert(data.status_message)
-                window.location.href = '/expenses';
-            },
-            // Catch errors
-            (error) =>{
-                // turn off loading
-                setLoading(false);
-                console.log(error)
-            }
-        )
-      }
+        }).then(res => res.json())
+            .then(
+                (data) => {
+                    if (data.status === false) {
+                        ValidationAlert(data.status_message)
+                        // turn off loading
+                        setLoading(false);
+                    } else {
+                        //Alert Message success
+                        SuccessAlert(data.status_message)
+                        // turn off loading
+                        setLoading(false);
+                        
+                        setTimeout(() => {
+                            window.location.href = '/expenses';
 
-      const handleFileUpload = (event) =>{
+                        },3000)
+
+                    }
+                },
+                // Catch errors
+                (error) => {
+                    // turn off loading
+                    setLoading(false);
+                    console.log(error)
+                }
+            )
+    }
+
+    const handleFileUpload = (event) => {
         const uploadFile = event.target.files[0]
-        if (uploadFile && uploadFile.size <= MAX_FILE_SIZE){
+        if (uploadFile && uploadFile.size <= MAX_FILE_SIZE) {
             setPhoto(uploadFile)
-        }else{
+        } else {
             alert(`File size should be less than ${MAX_FILE_SIZE / 1024} KB`);
             event.target.value = null;
             setPhoto('');
         }
-      }
+    }
 
-      useEffect(() =>{
-          const getAllActivity = () => {
-              axios.get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}`)
-                  .then((res) => {
-                      console.log(res.data.activities)
-                      setActivities(res.data.activities)
-                  }).catch((err) =>{
-                      console.log(err)
-              })
-          }
+    useEffect(() => {
+        const getAllActivity = () => {
+            axios.get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}`)
+                .then((res) => {
+                    setActivities(res.data.activities)
+                }).catch((err) => {
+                    console.log(err)
+                })
+        }
 
-          getAllActivity();
-      }, [user.client_id])
+        getAllActivity();
+    }, [user.client_id])
 
 
     return (
@@ -119,18 +125,18 @@ function AddExpenses(){
                                 <input type="text" className="form-control h-auto" placeholder="Location" onChange={(event) => setLocation(event.target.value)} required />
                             </div>
                             <div className="form-group">
-                            <button 
-                                type="submit" 
-                                className='btn btn-info w-100'
-                                disabled={loading}>
-                                {loading ? <Spinner color={'#fff'}/> : 'UPLOAD RECEIPT'}</button>
+                                <button
+                                    type="submit"
+                                    className='btn btn-info w-100'
+                                    disabled={loading}>
+                                    {loading ? <Spinner color={'#fff'} /> : 'UPLOAD RECEIPT'}</button>
                             </div>
                         </div>
-                        
+
                     </div>
                 </form>
             </div>
-            
+
         </>
     )
 }
