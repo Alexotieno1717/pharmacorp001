@@ -35,9 +35,10 @@ const Export = ({data, label, disabled, ...props}) => {
             <div className="dropdown me-md-3">
                 <div className="btn-group" style={{float: 'right'}}>
                     {/* export data main button */}
-                    <button type="button" className="btn btn-dark  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" disabled={disabled}>
-                        <i className="fa fa-file me-2"  data-bs-toggle="tooltip" data-bs-placement="top" title="Export data"></i> Export 
+                    <button type="button" className="btn btn-info  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" disabled={disabled}>
+                        <i className="fa fa-download me-2"  data-bs-toggle="tooltip" data-bs-placement="top" title="Export data"></i> Export
                     </button>
+        
                     {/* end export data main button */}
                     <ul className="dropdown-menu">
                         {/* Export to CSV  */}

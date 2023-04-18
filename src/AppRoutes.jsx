@@ -19,7 +19,7 @@ const AppRoutes = ()=> {
   const [isFullPageLayout, setIsFullPageLayout] = useState(false) 
   let navbarComponent = !isFullPageLayout ? <Navbar/> : '';
   let sidebarComponent = !isFullPageLayout ? <Sidebar/> : '';
-  let SettingsPanelComponent = !isFullPageLayout ? <SettingsPanel/> : '';
+  //let SettingsPanelComponent = !isFullPageLayout ? <SettingsPanel/> : '';
   let footerComponent = !isFullPageLayout ? <Footer/> : '';
 
 
@@ -64,7 +64,7 @@ const AppRoutes = ()=> {
                     <Route exact path='*' element='Page does not exits' />
                   </Routes>
                 </Suspense>
-                { SettingsPanelComponent }
+                {/* { SettingsPanelComponent } */}
               </div>
               { footerComponent }
             </div>

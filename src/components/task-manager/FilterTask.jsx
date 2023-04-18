@@ -23,7 +23,7 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 					<div className="form-group">
 						<label htmlFor="">Select Status</label>
 						<select
-							className="form-control h-auto"
+							className="form-select h-auto"
 							value={status}
 							onChange={(event) => setStatus(event.target.value)}>
 							<option value={'1'}>pending</option>
@@ -36,10 +36,10 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose} disabled={loading===true}>
-						 {loading === true ? <Spinner color={'#fff'} /> : 'Close'}
+						{loading === true ? <Spinner color={'#fff'} /> : 'Close'}
 					</Button>
 					<Button variant="primary" onClick={handleFilter} disabled={loading===true}>
-						 {loading === true ? <Spinner color={'#fff'}/> : 'Filter'}
+						{loading === true ? <Spinner color={'#fff'}/> : 'Filter'}
 					</Button>
 				</Modal.Footer>
 			</Modal>

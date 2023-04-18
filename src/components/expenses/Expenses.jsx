@@ -12,17 +12,25 @@ import AddExpenses from './AddExpenses'
 import FilterExpenses from './FilterExpenses'
 import UpdateExpenses from './UpdateExpenses'
 import ViewExpenses from './ViewExpenses'
+import DeleteExpense from './DeleteExpense'
 
 function Expenses() {
 
     const [selectedValue, setSelectedValue] = useState(new Date(), []);
     const [expenses, setExpenses] = useState([])
     const [expenseView, setExpenseView] = useState({});
+    const [expenseDelete, setExpenseDelete] = useState({});
     const [updateExpense, setUpdateExpense] = useState({});
     const [show, setShow] = useState(false);
+    const [showDeleteExpense, setShowDeleteExpense] = useState(false);
+
     const [loading, setLoading] = useState(false);
 
     const { user } = useAuth();
+
+    const handleDeleteClose = () => setShowDeleteExpense(false)
+    const handleShowClose = () => setShowDeleteExpense(true)
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -204,7 +212,11 @@ function Expenses() {
                         </span>
 
 
-                        <span onClick={() => deleteExpense(cell.row.original.id)} style={{ cursor: 'pointer' }}>
+                        <span onClick={() => {
+                            //deleteExpense(cell.row.original.id)
+                            setExpenseDelete(cell.row.original)
+                            handleShowClose()
+                            }} style={{ cursor: 'pointer' }}>
                             <i className="fa fa-trash action text-danger"></i>
                         </span>
                     </div>
@@ -213,7 +225,9 @@ function Expenses() {
         }
     ]
 
-
+    const filterDeleteExpense = (expense) => {
+        setExpenses(expenses.filter(item => item.id !== expense.id))
+    }
 
     return (
         <>
@@ -275,6 +289,16 @@ function Expenses() {
                 selectedValue={selectedValue}
                 setSelectedValue={setSelectedValue}
                 loading={loading} />
+
+            {/* Delete Expense */}
+            <DeleteExpense
+                show={showDeleteExpense}
+                handleClose={handleDeleteClose}
+                filterExpense={filterDeleteExpense}
+                expense={expenseDelete}
+                loading={loading}
+                setLoading={setLoading}
+                />
 
         </>
     )

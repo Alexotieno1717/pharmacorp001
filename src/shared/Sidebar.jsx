@@ -95,21 +95,21 @@ return (
         </Link>
       </li>
 
-      <li className={location.pathname === '/lead-generation' ? 'nav-item active' : 'nav-item'}>
+      <li className={location.pathname === '/lead-generation' ? 'nav-item active d-none' : 'nav-item d-none'}>
         <Link className="nav-link" to="/lead-generation">
           <span className="menu-title">Lead Generation</span>
           <i className="fa fa-user-plus menu-icon"></i>
         </Link>
       </li>
 
-      <li className={location.pathname === '/reference' ? 'nav-item active' : 'nav-item'}>
+      <li className={location.pathname === '/reference' ? 'nav-item active d-none' : 'nav-item d-none'}>
         <Link className="nav-link" to="/reference">
           <span className="menu-title">Reference</span>
           <i className="mdi mdi-link menu-icon"></i>
         </Link>
       </li>
 
-      <li className={location.pathname === '/calendar' ? 'nav-item active' : 'nav-item'}>
+      <li className={location.pathname === '/calendar' ? 'nav-item active d-none' : 'nav-item d-none'}>
         <Link className="nav-link" to="/calendar">
           <span className="menu-title">Calendar</span>
           <i className="mdi mdi-calendar menu-icon"></i>

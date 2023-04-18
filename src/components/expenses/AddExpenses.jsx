@@ -46,11 +46,11 @@ function AddExpenses() {
                         SuccessAlert(data.status_message)
                         // turn off loading
                         setLoading(false);
-                        
+
                         setTimeout(() => {
                             window.location.href = '/expenses';
 
-                        },3000)
+                        }, 3000)
 
                     }
                 },
@@ -66,6 +66,7 @@ function AddExpenses() {
     const handleFileUpload = (event) => {
         const uploadFile = event.target.files[0]
         if (uploadFile && uploadFile.size <= MAX_FILE_SIZE) {
+            console.log(uploadFile)
             setPhoto(uploadFile)
         } else {
             alert(`File size should be less than ${MAX_FILE_SIZE / 1024} KB`);
@@ -93,22 +94,31 @@ function AddExpenses() {
             <div className="container-fluid">
                 <form onSubmit={(event) => onSubmitHandler(event)}>
                     <div className="row">
-                        <div className="col-md-6">
-                            Upload Receipt Image
-
-                            <input type="file" accept="image/*" className='form-control mt-3' onChange={handleFileUpload} required />
-
-                            {photo && <p className='mt-4'>File name: {photo.name}</p>}
-                        </div>
-                        <div className="col-md-6 mt-3">
+                        <div className="col-md-12 mt-3">
                             <div className="form-group">
-                                <label htmlFor="">User Name : {user.names}</label>
-                                <input type="hidden" className="form-control h-auto" placeholder="Task name" />
+                                <label for="formFile" class="form-label">Upload Receipt Image</label>
+                                <input type="file" accept="image/*" className='form-control mt-3' onChange={handleFileUpload} placeholder='Choose image' required />
                             </div>
+
+                            {photo &&
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${URL.createObjectURL(photo)})`,
+                                        backgroundPosition: "center",
+                                        backgroundSize: "cover",
+                                        width: "100px",
+                                        height: "80px",
+                                        padding: "10px",
+                                        marginRight: "15px",
+                                        marginBottom: "15px",
+                                        borderRadius: "4px",
+                                    }}
+                                >
+                                </div>}
                             <div className="form-group">
                                 <label htmlFor="">Activity Type:</label>
-                                <select className="form-control h-auto" onChange={(event) => setGetActivityId(event.target.value)} required>
-                                    <option value="">Select Activity type.....</option>
+                                <select className="form-select h-auto" onChange={(event) => setGetActivityId(event.target.value)} required>
+                                    <option value="" disabled>Select Activity type.....</option>
                                     {activities.map((activity) => (
                                         <option key={activity.id} value={activity.id}>
                                             {activity.activity_name}

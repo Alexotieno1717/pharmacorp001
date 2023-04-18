@@ -11,23 +11,30 @@ import EditTask from './EditTask';
 import { SuccessAlert, ValidationAlert } from '../../utils/alerts';
 import FilterTask from './FilterTask';
 import { useAuth } from '../../context/auth-context';
+import DeleteTask from './DeleteTask';
 
 function TaskManager() {
     //Task State 
-    const [tasks, setTasks] = useState([])
-    const [filteredTasks, setFilteredTasks] = useState([])
-    const [taskView, setTaskView] = useState({})
-    const [taskEdit, setTaskEdit] = useState({})
+    const [tasks, setTasks] = useState([]);
+    const [filteredTasks, setFilteredTasks] = useState([]);
+    const [taskView, setTaskView] = useState({});
+    const [taskEdit, setTaskEdit] = useState({});
+    const [taskDelete, setTaskDelete] = useState({});
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState("1");
     const [selectedValue, setSelectedValue] = useState(new Date(), []);
     const [show, setShow] = useState(false);
+    const [showDeleteTask, setShowDeleteTask] = useState(false);
 
 
     const { user } = useAuth()
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const handleDeleteClose = () => setShowDeleteTask(false)
+    const handleShowClose = () => setShowDeleteTask(true)
+
     const resetFilter = () => setFilteredTasks([])
 
     const handleFilter = () => {
@@ -117,16 +124,20 @@ function TaskManager() {
             .then((res) => {
                 if (res.data.status === false) {
                     ValidationAlert(res.data.status_message)
+                } else {
+
+                    SuccessAlert(res.data.status_message)
+                    console.log(res.data)
+                    setTasks(tasks.filter(item => item.id !== id))
                 }
-                SuccessAlert(res.data.status_message)
-                console.log(res.data)
-                setTasks(tasks.filter(item => item.id !== id))
             }).catch((err) => {
                 console.log(err)
             })
 
 
     }
+
+    const filterDeleteTask = (task) => setTasks(tasks.filter(item => item.id !== task.id))
 
     // is user doesn't exist it will redirect
     if (!user) {
@@ -217,7 +228,10 @@ function TaskManager() {
                         </span>
 
 
-                        <span onClick={() => deleteTask(cell.row.original.id)} style={{ cursor: 'pointer' }}>
+                        <span onClick={() => { 
+                            setTaskDelete(cell.row.original)
+                            handleShowClose()
+                        }} style={{ cursor: 'pointer' }}>
                             <i className="fa fa-trash action text-danger"></i>
                         </span>
                     </div>
@@ -285,6 +299,14 @@ function TaskManager() {
                 loading={loading}
                 status={status}
                 setStatus={setStatus} />
+            {/* Delete Task */}
+            <DeleteTask
+                task={taskDelete}
+                show={showDeleteTask}
+                handleClose={handleDeleteClose}
+                loading={loading}
+                setLoading={setLoading}
+                filterTask={filterDeleteTask} />
         </>
     )
 }

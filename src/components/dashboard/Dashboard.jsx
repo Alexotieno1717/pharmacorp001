@@ -11,9 +11,9 @@ import Complete from './task-status/Complete';
 import Revisits from "./task-status/Revisits";
 import Cancel from "./task-status/Cancel";
 import ColumnFilter from "../../shared/table/ColumnFilter";
-import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css';
+import './Dashboard.scss';
 
 
 function Dashboard() {
@@ -35,8 +35,8 @@ function Dashboard() {
   const [revisitsStatus, setRevisitsStatus] = useState({})
   const [completeStatus, setCompleteStatus] = useState({})
   const [searchInput, setSearchInput] = useState('')
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  // const [startDate, setStartDate] = useState(new Date())
+  // const [endDate, setEndDate] = useState(new Date())
 
   // Dates
   const newDate = new Date();
@@ -51,7 +51,7 @@ function Dashboard() {
   //   endDate: endDate,
   //   key: 'selection',
   // }
-  
+
   // const handleSelect = (ranges) => {
   //   setStartDate(ranges.selection.startDate)
   //   setEndDate(ranges.selection.endDate)
@@ -71,13 +71,21 @@ function Dashboard() {
         })
     }
 
-    getActivity();
-    getTotalExpenses();
-    getRevisitTasks()
-    getCompletedTasks()
+    let isMounted = true;
+    const intervalId = setInterval(() => {
+      getActivity();
+      getTotalExpenses();
+      getRevisitTasks()
+      getCompletedTasks()
+
+    }, 5000)
+    return () => {
+      clearInterval(intervalId)
+      isMounted = false
+    }
   }, [])
 
-  const getRevisitTasks = () =>{
+  const getRevisitTasks = () => {
     // Axios Fetch total Revisits
 
     const params = new URLSearchParams({
@@ -86,14 +94,14 @@ function Dashboard() {
       task_status: 3
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
-        .then((res) => {
-          console.log('getting revisits', res.data)
-          setRevisitsStatus(res.data.data)
-        }).catch((err) =>{
-          console.log(err);
-    })
+      .then((res) => {
+        console.log('getting revisits', res.data)
+        setRevisitsStatus(res.data.data)
+      }).catch((err) => {
+        console.log(err);
+      })
   }
-  const getCompletedTasks = () =>{
+  const getCompletedTasks = () => {
     // Axios Fetch total Complete Task
 
     const params = new URLSearchParams({
@@ -102,18 +110,18 @@ function Dashboard() {
       task_status: 2
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
-        .then((res) => {
-          // console.log('getting completed tasks', res.data)
-          setCompleteStatus(res.data.data)
-        }).catch((err) =>{
-      console.log(err);
-    })
+      .then((res) => {
+        // console.log('getting completed tasks', res.data)
+        setCompleteStatus(res.data.data)
+      }).catch((err) => {
+        console.log(err);
+      })
   }
 
   // Getting total Expenses
   const getTotalExpenses = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/total-expenses?rep_id=${user.client_id}`)
+      .get(`${process.env.REACT_APP_API_URL}/total-expenses?rep_id=${user.client_id}` )
       .then((response) => {
         // console.log(response.data)
         setTotalExpenses(response.data.total_expenses)
@@ -151,7 +159,7 @@ function Dashboard() {
     return response
   }
 
-  const getButtonColor = (status) =>{
+  const getButtonColor = (status) => {
     switch (status) {
       case 'completed':
         return "btn-success";
@@ -163,7 +171,7 @@ function Dashboard() {
         return "btn-info";
 
       default:
-          return "btn-dark";
+        return "btn-dark";
     }
   }
 
@@ -226,13 +234,14 @@ function Dashboard() {
           <div className="dropdown">
             {/* eslint-disable-next-line no-restricted-globals */}
             <a className={`btn btn-sm dropdown-toggle ${getButtonColor(cell.row.original.status)}`}
-               href="sss" role="button"
+              href="sss" role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false"
 
             >
               {cell.row.original.status}
+              <i class="fas fa-caret-down icon-caret"></i>
             </a>
 
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -284,9 +293,8 @@ function Dashboard() {
     <div>
       <div className="page-header">
         <h3 className="page-title">
-          <span className="page-title-icon bg-info text-white mr-2">
-            <i className="mdi mdi-home" />
-          </span> Dashboard </h3>
+          Dashboard
+        </h3>
         <nav aria-label="breadcrumb">
           <ul className="breadcrumb">
             <li className="breadcrumb-item active" aria-current="page">
@@ -295,43 +303,55 @@ function Dashboard() {
           </ul>
         </nav>
       </div>
-      <div className="row">
-        <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-4 stretch-card grid-margin">
-              <div className="card bg-gradient-danger card-img-holder text-white">
-                <div className="card-body">
-                  <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
-                  <h4 className="font-weight-normal mb-3">Daily Expenses <i className="mdi mdi-chart-line mdi-24px float-right" />
-                  </h4>
-                  <h2 className="mb-5">{totalExpenses > 1 ? totalExpenses : '0'}</h2>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4 stretch-card grid-margin">
-              <div className="card bg-gradient-info card-img-holder text-white">
-                <div className="card-body">
-                  <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
-                  <h4 className="font-weight-normal mb-3">Today's Revisits <i className="mdi mdi-bookmark-outline mdi-24px float-right" />
-                  </h4>
-                  <h2 className="mb-5">{revisitsStatus?.total_activities || '0'}</h2>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4 stretch-card grid-margin">
-              <div className="card bg-gradient-success card-img-holder text-white">
-                <div className="card-body">
-                  <img src={require("../../assets/images/dashboard/circle.png")} className="card-img-absolute" alt="circle" />
-                  <h4 className="font-weight-normal mb-3">Completed Task <i className="mdi mdi-diamond mdi-24px float-right"></i>
-                  </h4>
-                  <h2 className="mb-5">{completeStatus?.total_activities || '0'}</h2>
-                </div>
-              </div>
-            </div>
 
+      {/* Stats Bar */}
+      <div className="col-md-12 mb-4">
+        <div className="row">
+          <div className="col-md-4">
+            <div className="card-statistic">
+              <div className="icon-stat d-flex">
+                <button className='btn btn-icon btn-inverse-info btn-sm btn-rounded'>
+                  <i className="mdi mdi-chart-line mdi-24px float-right" />
+                </button>
+                <div className="content">
+                  <h2>{totalExpenses > 1 ? totalExpenses : '0'}</h2>
+                  <h4 className='text-muted'>Daily Expenses</h4>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <div className="col-md-4">
+            <div className="card-statistic">
+              <div className="icon-stat d-flex">
+                <button className='btn btn-icon btn-inverse-success btn-sm btn-rounded'>
+                <i className="mdi mdi-bookmark-outline mdi-24px float-right" />
+                </button>
+                <div className="content">
+                  <h2>{revisitsStatus?.total_activities || '0'}</h2>
+                  <h4 className='text-muted'>Today's Revisits</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-4">
+            <div className="card-statistic">
+              <div className="icon-stat d-flex">
+                <button className='btn btn-icon btn-inverse-danger btn-sm btn-rounded'>
+                <i className="mdi mdi-diamond mdi-24px float-right"></i>
+                </button>
+                <div className="content">
+                  <h2>{completeStatus?.total_activities || '0'}</h2>
+                  <h4 className='text-muted'>Completed Task</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
+      {/* End Stat bar*/}
 
       <div className="row">
         <div className="col-12 grid-margin mt-4">
@@ -343,14 +363,26 @@ function Dashboard() {
                     <h4 className="mt-3">Today's Tasks</h4>
                   </div>
                   <div className="col-md-4">
-                   {/* Search & Filter by dates */}
-                    <input
-                        type='text'
-                        className='form-control h-auto rounded-5'
-                        placeholder="Search today's task by activity name"
-                        value={searchInput}
-                        onChange={(event) => setSearchInput(event.target.value)}
-                    />
+                    {/* Search & Filter by dates */}
+                    {/* <input
+                      type='text'
+                      className='form-control h-auto rounded-2'
+                      placeholder="Search today's task by activity name"
+                      value={searchInput}
+                      onChange={(event) => setSearchInput(event.target.value)}
+                    /> */}
+                    <div className="form-group">
+                      <label htmlFor="">Filter Activities By Status</label>
+                      <select className="form-select h-auto"
+                        onChange={(event) => setSearchInput(event.target.value)}>
+                        <option disbabled>Filter by Status</option>
+                        <option value={""}>All</option>
+                        <option value={"pending"}>Pending</option>
+                        <option value={"completed"}>Complete</option>
+                        <option value={"revisit"}>Revisits</option>
+                        <option value={"cancelled"}>Cancelled</option>
+                      </select>
+                    </div>
                   </div>
                   <div className="col-md-4">
                     {/* Export Data Button */}
@@ -361,20 +393,20 @@ function Dashboard() {
                 <div className="col-md-2" />
                 <div className="col-md-6 flex flex-column mx-auto">
                   {searchInput && (
-                      <div className='flex flex-column mx-auto'>
-                        {/* <DateRangePicker
+                    <div className='flex flex-column mx-auto'>
+                      {/* <DateRangePicker
                             ranges={[selectionRange]}
                             minDate={new Date()}
                             onChange={handleSelect}
                         /> */}
-                      </div>
+                    </div>
                   )}
                 </div>
 
                 <Table
                   columns={columns}
                   data={tasks.filter((row) =>
-                      row.activity_name.toLowerCase().includes(searchInput.toLowerCase())
+                    row.status.includes(searchInput)
                   )}
                   padeIndex={0}
                 />

@@ -50,7 +50,7 @@ const Navbar = () =>{
         <button className="navbar-toggler navbar-toggler align-self-center" type="button" onClick={ () => document.body.classList.toggle('sidebar-icon-only') }>
           <span className="mdi mdi-menu"></span>
         </button>
-        <div className="search-field d-none d-md-block">
+        {/* <div className="search-field d-none d-md-block">
           <form className="d-flex align-items-center h-100" action="#">
             <div className="input-group">
               <div className="input-group-prepend bg-transparent">
@@ -59,7 +59,7 @@ const Navbar = () =>{
               <input type="text" className="form-control bg-transparent border-0" placeholder="Search projects"/>
             </div>
           </form>
-        </div>
+        </div> */}
         <ul className="navbar-nav navbar-nav-right">
           <li className="nav-item nav-profile">
             <Dropdown alignRight>
@@ -92,11 +92,11 @@ const Navbar = () =>{
             </Dropdown>
           </li>
           
-          <li className="nav-item nav-settings d-none d-lg-block">
+          {/* <li className="nav-item nav-settings d-none d-lg-block">
             <button type="button" className="nav-link border-0" onClick={() => toggleRightSidebar()} >
               <i className="mdi mdi-format-line-spacing"></i>
             </button>
-          </li>
+          </li> */}
         </ul>
         <button className="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" onClick={() => toggleOffcanvas()}>
           <span className="mdi mdi-menu"></span>

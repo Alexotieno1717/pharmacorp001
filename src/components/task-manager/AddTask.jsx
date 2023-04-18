@@ -103,7 +103,7 @@ function AddTask() {
               <div className="form-group">
                   <label htmlFor="">Activity Type</label>
                   <select 
-                  className="form-control h-auto" 
+                  className="form-select h-auto" 
                   placeholder='select' 
                   value={activityType}
                   onChange={(event) =>  setActivityType(event.target.value)} required>
@@ -116,7 +116,7 @@ function AddTask() {
               </div>
               <div className="form-group">
                   <label htmlFor="">HCP Name</label>
-                  <select className="form-control h-auto" onChange={(event) => setHcpId(event.target.value)} required>
+                  <select className="form-select h-auto" onChange={(event) => setHcpId(event.target.value)} required>
                     <option value="">Select Health Care Provider Name.....</option>
                     {clients.map((client) => (
                       <option key={client.id} value={client.id}>
@@ -127,8 +127,8 @@ function AddTask() {
               </div>
               <div className="form-group">
                   <label htmlFor="">Product</label>
-                  <select className="form-control h-auto" onChange={(event) => setProductId(event.target.value)} required>
-                    <option value="">Select Product</option>
+                  <select className="form-select h-auto" onChange={(event) => setProductId(event.target.value)} required>
+                    <option value="" disabled>Select Product</option>
                     {products.map((product) => (
                       <option key={product.id} value={product.id}>
                         {product.name}
