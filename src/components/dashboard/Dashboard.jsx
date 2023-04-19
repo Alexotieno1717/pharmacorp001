@@ -375,7 +375,6 @@ function Dashboard() {
                       <label htmlFor="">Filter Activities By Status</label>
                       <select className="form-select h-auto"
                         onChange={(event) => setSearchInput(event.target.value)}>
-                        <option disbabled>Filter by Status</option>
                         <option value={""}>All</option>
                         <option value={"pending"}>Pending</option>
                         <option value={"completed"}>Complete</option>
@@ -386,7 +385,7 @@ function Dashboard() {
                   </div>
                   <div className="col-md-4">
                     {/* Export Data Button */}
-                    <Export data={tasks} label="Tasks" disabled={tasks.length < 1} />
+                    <Export data={tasks} label="Tasks" disabled={tasks !== undefined ? tasks.length < 1 : false} />
                     {/* End Export Data Button */}
                   </div>
                 </div>
