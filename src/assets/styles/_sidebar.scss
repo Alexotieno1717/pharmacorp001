@@ -69,11 +69,11 @@
             }
             color: $sidebar-light-menu-arrow-color;
             &:before{
-              content: "\f141";
+              //content: "\f141";
               font-size: inherit;
               color: inherit;
               .rtl & {
-                content: "\f142";
+                //content: "\f142";
               }
             }
             + .menu-icon {
@@ -199,7 +199,7 @@
           height: auto;
           border-top: 0;
           &:before {
-            content: "\F054";
+            //content: "\F054";
             font-family: "Material Design Icons";
             display: block;
             position: absolute;
@@ -207,7 +207,7 @@
             .rtl & {
               left: auto;
               right: 0;
-              content: "\F04D";
+              //content: "\F04D";
             }
             top:50%;
             @include transform(translateY(-50%));

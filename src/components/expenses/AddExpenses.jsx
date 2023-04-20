@@ -96,7 +96,7 @@ function AddExpenses() {
                     <div className="row">
                         <div className="col-md-12 mt-3">
                             <div className="form-group">
-                                <label for="formFile" class="form-label">Upload Receipt Image</label>
+                                <label htmlFor="formFile" className="form-label">Upload Receipt Image</label>
                                 <input type="file" accept="image/*" className='form-control mt-3' onChange={handleFileUpload} placeholder='Choose image' required />
                             </div>
 

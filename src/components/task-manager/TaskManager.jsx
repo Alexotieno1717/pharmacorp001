@@ -228,7 +228,7 @@ function TaskManager() {
                         </span>
 
 
-                        <span onClick={() => { 
+                        <span onClick={() => {
                             setTaskDelete(cell.row.original)
                             handleShowClose()
                         }} style={{ cursor: 'pointer' }}>
@@ -246,21 +246,38 @@ function TaskManager() {
         <>
             <div className="col-md-12 ">
                 <div className="row">
-                    <div className="col-md-10">
+                    <div className="col-12 col-md-10 mb-3">
+                        <div className="d-flex d-md-none justify-content-between">
+                            {/* Start Create Task Button */}
+                            <ModalButton
+                                target="task"
+                                label={<span><i className="fa fa-plus-circle me-2">
+                                </i>Create Task</span>
+                                }
+                            />
+                            {/* End Create Task Button */}
+                            <button className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
+                            </i>Filter Tasks</span>}</button>
+                            <button className={`${filteredTasks.length < 1 ? 'd-none' : ''}  btn btn-outline-primary text-primary mb-5 me-0 ms-3`} type="button" onClick={resetFilter}>{<span><i className="fa fa-plus-circle text-primary me-2">
+                            </i>Reset Filter</span>}</button>
+                        </div>
                         {/* Start Create Task Button */}
-                        <ModalButton
-                            target="task"
-                            label={<span><i className="fa fa-plus-circle me-2">
-                            </i>Create Task</span>
-                            }
-                        />
-                        {/* End Create Task Button */}
-                        <button className='btn btn-info text-white mb-5 me-0 ms-3' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
-                        </i>Filter Tasks</span>}</button>
-                        <button className={`${filteredTasks.length < 1 ? 'd-none' : ''}  btn btn-outline-primary text-primary mb-5 me-0 ms-3`} type="button" onClick={resetFilter}>{<span><i className="fa fa-plus-circle text-primary me-2">
-                        </i>Reset Filter</span>}</button>
+                        <div className="d-none d-md-block">
+                            <ModalButton
+                                target="task"
+                                label={<span><i className="fa fa-plus-circle me-2">
+                                </i>Create Task</span>
+                                }
+                            />
+                            {/* End Create Task Button */}
+                            <button className='btn btn-info text-white me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
+                            </i>Filter Tasks</span>}</button>
+                            <button className={`${filteredTasks.length < 1 ? 'd-none' : ''}  btn btn-outline-primary text-primary mb-5 me-0 ms-3`} type="button" onClick={resetFilter}>{<span><i className="fa fa-plus-circle text-primary me-2">
+                            </i>Reset Filter</span>}</button>
+
+                        </div>
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-12 col-md-2 mb-3 mb-md-0">
                         {/* Export Data Button */}
                         <Export data={filteredTasks.length > 0 ? filteredTasks : tasks} label="Tasks" disabled={tasks.length < 1 ? true : false} />
                         {/* End Export Data Button */}

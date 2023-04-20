@@ -32,8 +32,8 @@ const Export = ({data, label, disabled, ...props}) => {
     }
     return (
         <>
-            <div className="dropdown me-md-3">
-                <div className="btn-group" style={{float: 'right'}}>
+            <div className="dropdown me-md-0">
+                <div className="btn-group float-start float-md-end">
                     {/* export data main button */}
                     <button type="button" className="btn btn-info  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" disabled={disabled}>
                         <i className="fa fa-download me-2"  data-bs-toggle="tooltip" data-bs-placement="top" title="Export data"></i> Export

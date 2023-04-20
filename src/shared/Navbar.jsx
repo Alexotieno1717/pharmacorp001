@@ -69,7 +69,7 @@ const Navbar = () =>{
                   <span className="availability-status online"></span>
                 </div>
                 <div className="nav-profile-text">
-                  <p className="mb-1 text-black"><Trans>Dr. {user?.names}</Trans></p>
+                  <p className="mb-1 text-black"><Trans>{user?.names}</Trans></p>
                   
                 </div>
               </Dropdown.Toggle>

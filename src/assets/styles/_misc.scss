@@ -56,9 +56,14 @@ body {
 
 .content-wrapper {
   background: $content-bg;
-  padding: 2.75rem 2.25rem;
+  padding: 2.25rem 2.25rem;
+  padding-bottom: 0rem;
   width: 100%;
   @include flex-grow(1);
+
+  @media only screen and (max-width: 600px){
+    padding: 1.25rem 1.25rem;
+  }
 }
 
 .container-scroller {

@@ -216,7 +216,7 @@ function Expenses() {
                             //deleteExpense(cell.row.original.id)
                             setExpenseDelete(cell.row.original)
                             handleShowClose()
-                            }} style={{ cursor: 'pointer' }}>
+                        }} style={{ cursor: 'pointer' }}>
                             <i className="fa fa-trash action text-danger"></i>
                         </span>
                     </div>
@@ -233,19 +233,34 @@ function Expenses() {
         <>
             <div className="col-md-12">
                 <div className="row">
-                    <div className="col-md-6">
-                        {/* Start Add Member Button */}
-                        <ModalButton
-                            target="expense"
-                            label={<span><i className="fa fa-plus-circle me-2">
-                            </i>Add Expenses</span>
-                            }
-                        />
-                        {/* End Add Member Button */}
-                        <button className='btn btn-info text-white mb-5 me-0 ms-3' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
-                        </i>Filter Expenses</span>}</button>
+                    <div className="col-12 col-md-10 mb-3">
+                        <div className="d-flex d-md-none justify-content-between">
+                            {/* Start Add Member Button */}
+                            <ModalButton
+                                target="expense"
+                                label={<span><i className="fa fa-plus-circle me-2">
+                                </i>Add Expenses</span>
+                                }
+                            />
+                            {/* End Add Member Button */}
+                            <button className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
+                            </i>Filter Expenses</span>}</button>
+                        </div>
+                        <div className="d-none d-md-block">
+                            {/* Start Add Member Button */}
+                            <ModalButton
+                                target="expense"
+                                label={<span><i className="fa fa-plus-circle me-2">
+                                </i>Add Expenses</span>
+                                }
+                            />
+                            {/* End Add Member Button */}
+                            <button className='btn btn-info text-white me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
+                            </i>Filter Expenses</span>}</button>
+
+                        </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-12 col-md-2 mb-3 mb-md-0">
                         {/* Export Data Button */}
                         <Export data={expenses} label="Expenses" disabled={expenses < 1} />
                         {/* End Export Data Button */}
@@ -276,7 +291,7 @@ function Expenses() {
             </Modal>
 
             {/* Modal View Expenses */}
-            <Modal id="editEx" label='View Expenses'>
+            <Modal id="editEx" label='Edit Expenses'>
                 <UpdateExpenses updateExpense={updateExpense} />
             </Modal>
 
@@ -298,7 +313,7 @@ function Expenses() {
                 expense={expenseDelete}
                 loading={loading}
                 setLoading={setLoading}
-                />
+            />
 
         </>
     )

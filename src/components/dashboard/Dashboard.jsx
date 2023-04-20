@@ -121,7 +121,7 @@ function Dashboard() {
   // Getting total Expenses
   const getTotalExpenses = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/total-expenses?rep_id=${user.client_id}` )
+      .get(`${process.env.REACT_APP_API_URL}/total-expenses?rep_id=${user.client_id}`)
       .then((response) => {
         // console.log(response.data)
         setTotalExpenses(response.data.total_expenses)
@@ -233,7 +233,7 @@ function Dashboard() {
         return <div>
           <div className="dropdown">
             {/* eslint-disable-next-line no-restricted-globals */}
-            <a className={`btn btn-sm dropdown-toggle ${getButtonColor(cell.row.original.status)}`}
+            <a className={`btn btn-sm btn-dropdown dropdown-toggle ${getButtonColor(cell.row.original.status)}`}
               href="sss" role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
@@ -241,7 +241,7 @@ function Dashboard() {
 
             >
               {cell.row.original.status}
-              <i class="fas fa-caret-down icon-caret"></i>
+              <i class="fas fa-caret-down icon-caret d-none"></i>
             </a>
 
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -291,7 +291,7 @@ function Dashboard() {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="page-header page-header-custom">
         <h3 className="page-title">
           Dashboard
         </h3>
@@ -305,9 +305,9 @@ function Dashboard() {
       </div>
 
       {/* Stats Bar */}
-      <div className="col-md-12 mb-4">
+      <div className="col-md-12 mb-3">
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-4 mb-4 mb-md-0">
             <div className="card-statistic">
               <div className="icon-stat d-flex">
                 <button className='btn btn-icon btn-inverse-info btn-sm btn-rounded'>
@@ -321,11 +321,11 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-md-4 mb-4 mb-md-0">
             <div className="card-statistic">
               <div className="icon-stat d-flex">
                 <button className='btn btn-icon btn-inverse-success btn-sm btn-rounded'>
-                <i className="mdi mdi-bookmark-outline mdi-24px float-right" />
+                  <i className="mdi mdi-bookmark-outline mdi-24px float-right" />
                 </button>
                 <div className="content">
                   <h2>{revisitsStatus?.total_activities || '0'}</h2>
@@ -335,11 +335,11 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-md-4  mb-md-0">
             <div className="card-statistic">
               <div className="icon-stat d-flex">
                 <button className='btn btn-icon btn-inverse-danger btn-sm btn-rounded'>
-                <i className="mdi mdi-diamond mdi-24px float-right"></i>
+                  <i className="mdi mdi-diamond mdi-24px float-right"></i>
                 </button>
                 <div className="content">
                   <h2>{completeStatus?.total_activities || '0'}</h2>
@@ -354,36 +354,36 @@ function Dashboard() {
       {/* End Stat bar*/}
 
       <div className="row">
-        <div className="col-12 grid-margin mt-4">
-          <div className="card">
+        <div className="col-12 grid-margin mt-2 mt-md-4">
+          <div className="card card-custom">
             <div className="card-body">
-              <div className="table-responsive">
+              <div className="table-responsive d-grid align-items-start">
                 <div className="row mb-3">
-                  <div className="col-md-4">
-                    <h4 className="mt-3">Today's Tasks</h4>
-                  </div>
-                  <div className="col-md-4">
-                    {/* Search & Filter by dates */}
-                    {/* <input
-                      type='text'
-                      className='form-control h-auto rounded-2'
-                      placeholder="Search today's task by activity name"
-                      value={searchInput}
-                      onChange={(event) => setSearchInput(event.target.value)}
-                    /> */}
-                    <div className="form-group">
-                      <label htmlFor="">Filter Activities By Status</label>
-                      <select className="form-select h-auto"
-                        onChange={(event) => setSearchInput(event.target.value)}>
-                        <option value={""}>All</option>
-                        <option value={"pending"}>Pending</option>
-                        <option value={"completed"}>Complete</option>
-                        <option value={"revisit"}>Revisits</option>
-                        <option value={"cancelled"}>Cancelled</option>
-                      </select>
+                  <div className="d-flex justify-content-between">
+                    <div className=" d-flex align-items-start">
+                      <h4>Today's Tasks</h4>
                     </div>
+                    <div className="d-flex align-items-center justify-content-md-center">
+                      <div className="form-group">
+                        <label htmlFor="">Filter Activities By Status</label>
+                        <select className="form-select h-auto"
+                          onChange={(event) => setSearchInput(event.target.value)}>
+                          <option value={""} className='cursor-pointer'>All</option>
+                          <option value={"pending"} className='cursor-pointer'>Pending</option>
+                          <option value={"completed"} className='cursor-pointer'>Complete</option>
+                          <option value={"revisit"} className='cursor-pointer'>Revisits</option>
+                          <option value={"cancelled"} className='cursor-pointer'>Cancelled</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="d-none d-md-flex align-items-center justify-content-md-end">
+                      {/* Export Data Button */}
+                      <Export data={tasks} label="Tasks" disabled={tasks !== undefined ? tasks.length < 1 : false} />
+                      {/* End Export Data Button */}
+                    </div>
+
                   </div>
-                  <div className="col-md-4">
+                  <div className="d-flex d-md-none align-items-center justify-content-end">
                     {/* Export Data Button */}
                     <Export data={tasks} label="Tasks" disabled={tasks !== undefined ? tasks.length < 1 : false} />
                     {/* End Export Data Button */}

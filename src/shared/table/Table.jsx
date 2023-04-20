@@ -81,9 +81,10 @@ const Table = ({ columns, data, loading, getTrProps }) => {
 
           </tfoot>
         </table>
-        <nav aria-label="Page navigation example">
-          <ul className="pagination  justify-content-center mt-4 mb-1 pb-0">
-            {/* <li className='me-md-auto'>
+      </div>
+      <nav aria-label="Page navigation example">
+        <ul className="pagination  justify-content-center mt-4 mb-1 pb-0">
+          {/* <li className='me-md-auto'>
                   Go to page:{' '}
                   <input
                     type="text"
@@ -96,53 +97,52 @@ const Table = ({ columns, data, loading, getTrProps }) => {
                     className='input-goto'
                   />
                 </li> */}
-            <li className='d-inline-flex me-md-auto'>
-              <span className='d-flex align-items-center'>
-                Page &nbsp;{' '}
-                <strong>
-                  {pageIndex + 1} of {pageOptions.length}
-                </strong>{' '}
-              </span>
-            </li>
-            <li className='d-inline-flex me-md-auto'>
-              <span className='d-flex align-items-center'>Show rows &nbsp;</span>{'  '}
-              <select
-                value={pageSize}
-                onChange={e => {
-                  setPageSize(Number(e.target.value))
-                }}
-                className="form-select" style={{ width: '72px' }}>
-                {[10, 20, 30, 40, 50].map(pageSize => (
-                  <option key={pageSize} value={pageSize}>
-                    {pageSize}
-                  </option>
-                ))}
-              </select>
-            </li>
-            <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
-              <button className="page-link page-link-custom rounded-start" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                Start
-              </button>{' '}
-            </li>
-            <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
-              <button className="page-link page-link-custom" onClick={() => previousPage()} disabled={!canPreviousPage}>
-                Previous
-              </button>{' '}
-            </li>
-            <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
-              <button className="page-link page-link-custom" onClick={() => nextPage()} disabled={!canNextPage}>
-                Next
-              </button>{' '}
-            </li>
-            <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
-              <button className="page-link page-link-custom rounded-end" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                End
-              </button>{' '}
-            </li>
+          <li className='d-none d-md-inline-flex me-md-auto'>
+            <span className='d-flex align-items-center'>
+              Page &nbsp;{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </span>
+          </li>
+          <li className='d-none d-md-inline-flex me-md-auto'>
+            <span className='d-flex align-items-center'>Show rows &nbsp;</span>{'  '}
+            <select
+              value={pageSize}
+              onChange={e => {
+                setPageSize(Number(e.target.value))
+              }}
+              className="form-select" style={{ width: '72px' }}>
+              {[10, 20, 30, 40, 50].map(pageSize => (
+                <option key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+          </li>
+          <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
+            <button className="page-link page-link-custom rounded-start" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+              Start
+            </button>{' '}
+          </li>
+          <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
+            <button className="page-link page-link-custom" onClick={() => previousPage()} disabled={!canPreviousPage}>
+              Previous
+            </button>{' '}
+          </li>
+          <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
+            <button className="page-link page-link-custom" onClick={() => nextPage()} disabled={!canNextPage}>
+              Next
+            </button>{' '}
+          </li>
+          <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
+            <button className="page-link page-link-custom rounded-end" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+              End
+            </button>{' '}
+          </li>
 
-          </ul>
-        </nav>
-      </div>
+        </ul>
+      </nav>
     </>
   )
 }

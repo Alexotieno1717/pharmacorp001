@@ -64,8 +64,7 @@ return (
             <span className="login-status online"></span> {/* change to offline or busy as needed */}
           </div>
           <div className="nav-profile-text">
-            <h6 className="font-weight-bold mt-2 mb-2">Dr. {user?.names}</h6>
-            <p className="text-secondary text-small">Cardiologist</p>
+            <h6 className="font-weight-bold mt-2 mb-2">{user?.names}</h6>
           </div>
           {/* <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i> */}
         </a>
