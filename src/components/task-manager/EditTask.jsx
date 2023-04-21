@@ -27,7 +27,8 @@ function EditTask({ taskEdit }) {
       ambassador_id: 19,
       location: location,
       notes: notes,
-      scheduled_date: date
+      scheduled_date: date,
+      status: taskEdit?.status
     })
     console.log(params);
     axios

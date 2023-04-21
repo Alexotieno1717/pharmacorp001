@@ -279,7 +279,12 @@ function TaskManager() {
                             </i>Filter Tasks</span>}</button>
                             <button className={`${filteredTasks.length < 1 ? 'd-none' : ''}  btn btn-outline-primary text-primary mb-5 me-0 ms-3`} type="button" onClick={resetFilter}>{<span><i className="fa fa-plus-circle text-primary me-2">
                             </i>Reset Filter</span>}</button>
-
+                            <form className="d-inline-block">
+                                <div className=" ms-4 input-group">
+                                    <input type="text" className="form-control" id="searchTask" placeholder="Search a task" />
+                                    <span class="input-group-text" id="searchTask">&#x1F50D;</span>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <div className="col-12 col-md-2 mb-3 mb-md-0">
