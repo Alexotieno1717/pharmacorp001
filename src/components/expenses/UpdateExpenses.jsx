@@ -32,12 +32,18 @@ function UpdateExpenses({ updateExpense }) {
                 (data) => {
                     if (data.status.false === false) {
                         ValidationAlert(data.status_message)
+                        // turn off loading
+                        setLoading(false);
+                    } else {
+                        //Alert Message success
+                        SuccessAlert(data.status_message)
+
+                        setTimeout(() => {
+                            window.location.href = '/expenses';
+
+                        }, 2000)
+
                     }
-                    // turn off loading
-                    setLoading(false);
-                    //Alert Message success
-                    SuccessAlert(data.status_message)
-                    window.location.href = '/expenses';
                 },
                 // Catch errors
                 (error) => {

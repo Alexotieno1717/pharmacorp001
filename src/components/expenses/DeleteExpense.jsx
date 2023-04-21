@@ -19,7 +19,7 @@ function DeleteExpense(props) {
                 } else {
                     setLoading(false)
                     SuccessAlert(res.data.status_message)
-                    console.log(res.data)
+                    //console.log(res.data)
                     filterExpense(expense)
                     handleClose()
                 }

@@ -25,6 +25,9 @@ function TaskManager() {
     const [selectedValue, setSelectedValue] = useState(new Date(), []);
     const [show, setShow] = useState(false);
     const [showDeleteTask, setShowDeleteTask] = useState(false);
+    const [productId, setProductId] = useState("");
+    const [activityType, setActivityType] = useState('')
+
 
 
     const { user } = useAuth()
@@ -45,7 +48,9 @@ function TaskManager() {
             rep_id: user.client_id,
             startDate: selectedValue[0] !== undefined ? selectedValue[0].toISOString().slice(0, 10) : ' ',
             endDate: selectedValue[0] !== undefined ? selectedValue[1].toISOString().slice(0, 10) : ' ',
-            task_status: status
+            task_status: status,
+            product_id: productId,
+            activity_type: activityType
         }).toString();
 
         axios
@@ -60,7 +65,7 @@ function TaskManager() {
                     setFilteredTasks(response.data.data.activities)
 
                 }
-                // turn off loading
+                // turn off loadingoptions[0]
                 setLoading(false);
 
                 // close modal
@@ -258,7 +263,7 @@ function TaskManager() {
                             {/* End Create Task Button */}
                             <button className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
                             </i>Filter Tasks</span>}</button>
-                            <button className={`${filteredTasks.length < 1 ? 'd-none' : ''}  btn btn-outline-primary text-primary mb-5 me-0 ms-3`} type="button" onClick={resetFilter}>{<span><i className="fa fa-plus-circle text-primary me-2">
+                            <button className={`${filteredTasks.length < 1 ? 'd-none' : ''}  btn btn-outline-primary text-primary mb-0 me-0 ms-3`} type="button" onClick={resetFilter}>{<span><i className="fa fa-plus-circle text-primary me-2">
                             </i>Reset Filter</span>}</button>
                         </div>
                         {/* Start Create Task Button */}
@@ -315,7 +320,9 @@ function TaskManager() {
                 setSelectedValue={setSelectedValue}
                 loading={loading}
                 status={status}
-                setStatus={setStatus} />
+                setStatus={setStatus}
+                setProductId={setProductId}
+                setActivityType={setActivityType} />
             {/* Delete Task */}
             <DeleteTask
                 task={taskDelete}
