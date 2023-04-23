@@ -4,9 +4,10 @@ import { Spinner } from "react-bootstrap";
 import { SuccessAlert, ValidationAlert } from "../../../utils/alerts";
 
 function Complete(props) {
-	const { user,handleComplete, taskSelected, loading, setLoading } = props;
+	const { user, handleComplete, taskSelected, loading, setLoading } = props;
 
 	const [message, setMessage] = useState("");
+	
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const response = await handleComplete();

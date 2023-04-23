@@ -21,13 +21,13 @@ function TaskManager() {
     const [taskEdit, setTaskEdit] = useState({});
     const [taskDelete, setTaskDelete] = useState({});
     const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState("1");
+    const [status, setStatus] = useState('');
     const [selectedValue, setSelectedValue] = useState(new Date(), []);
     const [show, setShow] = useState(false);
     const [showDeleteTask, setShowDeleteTask] = useState(false);
     const [productId, setProductId] = useState("");
     const [activityType, setActivityType] = useState('')
-
+    const [searchInput, setSearchInput] = useState('')
 
 
     const { user } = useAuth()
@@ -281,7 +281,7 @@ function TaskManager() {
                             </i>Reset Filter</span>}</button>
                             <form className="d-inline-block">
                                 <div className=" ms-4 input-group">
-                                    <input type="text" className="form-control" id="searchTask" placeholder="Search a task" />
+                                    <input type="text" className="form-control" id="searchTask" placeholder="Search a task" onChange={(event) => setSearchInput(event.target.value)} />
                                     <span class="input-group-text" id="searchTask">&#x1F50D;</span>
                                 </div>
                             </form>
@@ -299,7 +299,9 @@ function TaskManager() {
                         <div className="col-md-12">
                             <Table
                                 columns={columns}
-                                data={filteredTasks.length > 0 ? filteredTasks : tasks}
+                                data={filteredTasks.length > 0 ? filteredTasks : tasks.filter((row) =>
+                                    row.activity_name.toLowerCase().includes(searchInput) || row.activity_type.toLowerCase().includes(searchInput)  || row.location.toLowerCase().includes(searchInput) || row.product_id.toLowerCase().includes(searchInput)
+                                )}
                                 padeIndex={0}
                             />
                         </div>

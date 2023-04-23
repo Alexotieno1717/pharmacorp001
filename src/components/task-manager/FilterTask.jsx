@@ -25,9 +25,9 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 			})
 	}
 
-	useEffect(()=>{
+	useEffect(() => {
 		fetchProducts()
-	},[])
+	}, [])
 
 	return (
 		<div>
@@ -46,8 +46,10 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 						<label htmlFor="">Select Status</label>
 						<select
 							className="form-select h-auto"
-							value={status}
+							//value={status}
 							onChange={(event) => setStatus(event.target.value)}>
+							<option disabled>Select Status</option>
+							<option defaultChecked>All</option>
 							<option value={'1'}>pending</option>
 							<option value={'2'}>completed</option>
 							<option value={'3'}>revisit</option>
@@ -61,6 +63,8 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 							placeholder='select'
 							//value={activityType}
 							onChange={(event) => setActivityType(event.target.value)} required>
+							<option disabled>Select Activity Type</option>
+							<option defaultChecked>All</option>
 							{options.map((value) => (
 								<option value={value} key={value}>
 									{value}
@@ -71,7 +75,8 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 					<div className="form-group">
 						<label htmlFor="">Product</label>
 						<select className="form-select h-auto" onChange={(event) => setProductId(event.target.value)} required>
-							<option value="" disabled>Select Product</option>
+							<option disabled>Select Product</option>
+							<option defaultChecked>All</option>
 							{products.map((product) => (
 								<option key={product.id} value={product.id}>
 									{product.name}
