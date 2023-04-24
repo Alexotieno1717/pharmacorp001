@@ -57,13 +57,13 @@ function Dashboard() {
   //   setEndDate(ranges.selection.endDate)
 
   // }
-
+  const currentDay = new Date().toISOString().slice(0, 10)
   // use effect to fetch content on page mount
   useEffect(() => {
     const getActivity = () => {
       // axios fetch all task
       axios
-        .get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}`)
+        .get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}&start_date=${currentDay}`)
         .then((response) => {
           setTasks(response.data.activities)
         }).catch((err) => {
