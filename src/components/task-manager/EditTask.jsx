@@ -14,6 +14,20 @@ function EditTask({ taskEdit }) {
   const [date, setDate] = useState('')
   const [loading, setLoading] = useState(false);
 
+  const statusNumber = () => {
+    if (taskEdit.status === 'revisit') {
+      return '3'
+    } else if (taskEdit.status === 'pending') {
+      return '1'
+    } else if (taskEdit.status === 'cancelled') {
+      return '4'
+    } else if (taskEdit.status === 'completed') {
+      return '2'
+    } else {
+      return '1'
+    }
+  }
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
     //set loading to true
@@ -28,7 +42,7 @@ function EditTask({ taskEdit }) {
       location: location,
       notes: notes,
       scheduled_date: date,
-      status: taskEdit?.status
+      status: statusNumber()
     })
     console.log(params);
     axios
