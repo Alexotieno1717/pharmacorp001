@@ -18,7 +18,12 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 	const fetchProducts = () => {
 		axios.get(`${process.env.REACT_APP_API_URL}/fetch-products`)
 			.then((res) => {
-				setProducts(res.data.data)
+				if(res.data.status === false) {
+		
+				} else {
+		
+				setProducts(res.data.products)
+				}
 				// console.log(res.data)
 			}).catch((err) => {
 				console.log(err)
@@ -86,10 +91,10 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose} disabled={loading === true}>
+					<Button variant="dark" onClick={handleClose} disabled={loading === true}>
 						{loading === true ? <Spinner color={'#fff'} /> : 'Close'}
 					</Button>
-					<Button variant="primary" onClick={handleFilter} disabled={loading === true}>
+					<Button variant="info" onClick={handleFilter} disabled={loading === true}>
 						{loading === true ? <Spinner color={'#fff'} /> : 'Filter'}
 					</Button>
 				</Modal.Footer>

@@ -23,6 +23,8 @@ function Expenses() {
     const [updateExpense, setUpdateExpense] = useState({});
     const [show, setShow] = useState(false);
     const [showDeleteExpense, setShowDeleteExpense] = useState(false);
+    const [showExpenseAdd, setShowExpenseAdd] = useState(false);
+    const [showExpenseEdit, setShowExpenseEdit] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -30,6 +32,12 @@ function Expenses() {
 
     const handleDeleteClose = () => setShowDeleteExpense(false)
     const handleShowClose = () => setShowDeleteExpense(true)
+
+    const handleExpenseAddClose = () => setShowExpenseAdd(false)
+    const handleExpenseAddShow = () => setShowExpenseAdd(true)
+
+    const handleExpenseEditClose = () => setShowExpenseEdit(false)
+    const handleExpenseEditShow = () => setShowExpenseEdit(true)
 
 
     const handleClose = () => setShow(false);
@@ -130,6 +138,21 @@ function Expenses() {
 
     }
 
+    const updateExpenses = (expense) =>{
+        setExpenses([expense, ...expenses])
+    }
+
+    const editExpense = (updatedExpense) =>{
+        console.log(updatedExpense)
+        const newExpense = expenses.map((item) => {
+            if (updatedExpense.id === item.id) {
+                return updatedExpense
+            }
+            return item;
+        })
+        setExpenses(newExpense);
+    }
+
     // is user doesn't exist it will redirect
     if (!user) {
         return window.location.href = '/auth/login';
@@ -200,7 +223,20 @@ function Expenses() {
 
 
                         <span tabIndex="0" data-toggle="tooltip" title="Edit Task">
-                            <ModalIcon
+                        <span 
+                            onClick={handleExpenseEditShow}
+                        >
+                            {
+                                <span
+                                    onClick={() => {
+                                        setUpdateExpense(cell.row.original)
+                                    }}
+                                >
+                                    <i className="fa fa-edit text-success me-2" />
+                                </span>
+                            }
+                        </span>
+                            {/* <ModalIcon
                                 target="editEx"
                                 label={<i className="fa fa-edit text-success me-2">
                                 </i>
@@ -208,7 +244,7 @@ function Expenses() {
                                 onClick={() => {
                                     setUpdateExpense(cell.row.original)
                                 }}
-                            />
+                            /> */}
                         </span>
 
 
@@ -236,24 +272,48 @@ function Expenses() {
                     <div className="col-12 col-md-10 mb-3">
                         <div className="d-flex d-md-none justify-content-between">
                             {/* Start Add Member Button */}
-                            <ModalButton
+                            <button 
+                                className='btn btn-info text-white me-0 ms-md-3 mb-3 mb-md-0' 
+                                type="button" 
+                                onClick={handleExpenseAddShow}
+                            >
+                                {
+                                    <span>
+                                        <i className="fa fa-plus-circle me-2" />
+                                        Add Expenses
+                                    </span>
+                                }
+                            </button>
+                            {/* <ModalButton
                                 target="expense"
                                 label={<span><i className="fa fa-plus-circle me-2">
                                 </i>Add Expenses</span>
                                 }
-                            />
+                            /> */}
                             {/* End Add Member Button */}
                             <button className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
                             </i>Filter Expenses</span>}</button>
                         </div>
                         <div className="d-none d-md-block">
                             {/* Start Add Member Button */}
-                            <ModalButton
+                            <button 
+                                className='btn btn-info text-white me-0 ms-md-3 mb-3 mb-md-0' 
+                                type="button" 
+                                onClick={handleExpenseAddShow}
+                            >
+                                {
+                                    <span>
+                                        <i className="fa fa-plus-circle me-2" />
+                                        Add Expenses
+                                    </span>
+                                }
+                            </button>
+                            {/* <ModalButton
                                 target="expense"
                                 label={<span><i className="fa fa-plus-circle me-2">
                                 </i>Add Expenses</span>
                                 }
-                            />
+                            /> */}
                             {/* End Add Member Button */}
                             <button className='btn btn-info text-white me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
                             </i>Filter Expenses</span>}</button>
@@ -281,19 +341,25 @@ function Expenses() {
             </div>
 
             {/* Modal Add Expenses */}
-            <Modal className='modal-lg' id="expense" label='Add Expenses'>
-                <AddExpenses />
-            </Modal>
+            <AddExpenses 
+                showExpenseAdd={showExpenseAdd}
+                handleExpenseAddClose={handleExpenseAddClose}
+                onAddEpense={updateExpenses}
+            />
 
             {/* Modal View Expenses */}
             <Modal id="viewEx" label='View Expenses'>
                 <ViewExpenses expenseView={expenseView} />
             </Modal>
 
-            {/* Modal View Expenses */}
-            <Modal id="editEx" label='Edit Expenses'>
-                <UpdateExpenses updateExpense={updateExpense} />
-            </Modal>
+            {/* Modal Edit Expenses */}
+            <UpdateExpenses 
+                showExpenseEdit={showExpenseEdit}
+                updateExpense={updateExpense}
+                handleExpenseEditClose={handleExpenseEditClose}
+                onEditExpense={editExpense}
+            />
+            
 
             {/* Filter Expenses */}
             <FilterExpenses

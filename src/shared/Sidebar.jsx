@@ -60,11 +60,12 @@ return (
       <li className="nav-item nav-profile">
         <a href="!#" className="nav-link" onClick={evt =>evt.preventDefault()}>
           <div className="nav-profile-image">
-            <img src={ require("../assets/images/faces/face1.jpg") } alt="profile" />
-            <span className="login-status online"></span> {/* change to offline or busy as needed */}
+            <i className="fa fa-solid fa-user-circle fa-4x" />
+            {/* <img src={ require("../assets/images/faces/face1.jpg") } alt="profile" /> */}
+            <span className="login-status online ms-2 text-success"></span> {/* change to offline or busy as needed */}
           </div>
           <div className="nav-profile-text">
-            <h6 className="font-weight-bold mt-2 mb-2">{user?.names}</h6>
+            <h6 className="font-weight-bold mt-2 ms-1 mb-2">{user?.names}</h6>
           </div>
           {/* <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i> */}
         </a>

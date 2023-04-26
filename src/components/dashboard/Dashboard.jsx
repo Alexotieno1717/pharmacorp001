@@ -14,6 +14,7 @@ import ColumnFilter from "../../shared/table/ColumnFilter";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css';
 import './Dashboard.scss';
+import { ValidationAlert } from '../../utils/alerts';
 
 
 function Dashboard() {
@@ -28,35 +29,19 @@ function Dashboard() {
 
   //Task State 
   const [tasks, setTasks] = useState([])
-  //const [value, onChange] = useState(new Date());
   const [taskSelected, setTaskSelected] = useState();
   const [totalExpenses, setTotalExpenses] = useState('');
   const [loading, setLoading] = useState(false);
   const [revisitsStatus, setRevisitsStatus] = useState({})
   const [completeStatus, setCompleteStatus] = useState({})
   const [searchInput, setSearchInput] = useState('')
-  // const [startDate, setStartDate] = useState(new Date())
-  // const [endDate, setEndDate] = useState(new Date())
 
   // Dates
   const newDate = new Date();
-  console.log(newDate.toDateString());
 
   // user state
   const { user } = useAuth();
 
-  //React Date Range Dates
-  // const selectionRange = {
-  //   startDate: startDate,
-  //   endDate: endDate,
-  //   key: 'selection',
-  // }
-
-  // const handleSelect = (ranges) => {
-  //   setStartDate(ranges.selection.startDate)
-  //   setEndDate(ranges.selection.endDate)
-
-  // }
   const currentDay = new Date().toISOString().slice(0, 10)
   // use effect to fetch content on page mount
   useEffect(() => {
@@ -65,7 +50,13 @@ function Dashboard() {
       axios
         .get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}&start_date=${currentDay}`)
         .then((response) => {
-          setTasks(response.data.activities)
+          console.log(response.data.activities)
+          if (response.data.status === false) {
+            // ValidationAlert(response.data.status_message)
+          }else{
+            setTasks(response.data.activities)
+          }
+          
         }).catch((err) => {
           console.log(err)
         })
@@ -95,7 +86,7 @@ function Dashboard() {
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
       .then((res) => {
-        console.log('getting revisits', res.data)
+        // console.log('getting revisits', res.data)
         setRevisitsStatus(res.data.data)
       }).catch((err) => {
         console.log(err);
@@ -241,7 +232,7 @@ function Dashboard() {
 
             >
               {cell.row.original.status}
-              <i class="fas fa-caret-down icon-caret d-none"></i>
+              <i className="fas fa-caret-down icon-caret d-none"></i>
             </a>
 
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">

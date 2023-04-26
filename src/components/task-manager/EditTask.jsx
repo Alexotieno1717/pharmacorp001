@@ -1,10 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Spinner } from 'react-bootstrap'
+import { Button, Modal, Spinner } from 'react-bootstrap'
 import { useAuth } from '../../context/auth-context'
 import { SuccessAlert, ValidationAlert } from '../../utils/alerts'
 
-function EditTask({ taskEdit }) {
+function EditTask({ taskEdit, editTask, showUpdatedTask, handleUpdateClose }) {
 
   const { user } = useAuth()
 
@@ -44,7 +44,7 @@ function EditTask({ taskEdit }) {
       scheduled_date: date,
       status: statusNumber()
     })
-    console.log(params);
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/update-activity?${params}`)
       .then((response) => {
@@ -55,13 +55,16 @@ function EditTask({ taskEdit }) {
         } else {
           // turn off loading
           setLoading(false);
+
+          // Passing the updated task from state
+          const getEditedTask = response.data.activity;
+          editTask(getEditedTask)
+
+          // Success Alert
           SuccessAlert(response.data.status_message)
 
-          setTimeout(() => {
-
-            window.location.href = '/task-manager';
-
-          }, 2000)
+          // Close the modal
+          handleUpdateClose()
 
         }
       }).catch((err) => {
@@ -80,54 +83,61 @@ function EditTask({ taskEdit }) {
 
   return (
     <div>
-      <form onSubmit={(event) => onSubmitHandler(event)}>
-        <div className="form-group">
-          <label htmlFor="">ID: {taskEdit.id}</label>
-          <br />
-          <label htmlFor="">Activity Name</label>
-          <input
-            type="text"
-            className="form-control h-auto"
-            placeholder="Activity name"
-            value={activity}
-            onChange={(event) => setActivity(event.target.value)} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="">Location</label>
-          <input
-            type="text"
-            className="form-control h-auto"
-            value={location}
-            placeholder="Location" onChange={(event) => setLocation(event.target.value)} />
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="">Objective</label>
-          <textarea
-            className="form-control"
-            id="objective" rows="4"
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}>
-          </textarea>
-        </div>
-        <div className="form-group">
-          <label htmlFor="">Rescheduled date</label>
-          <input
-            type="date"
-            className="form-control h-auto"
-            value={date}
-            onChange={(event) => setDate(event.target.value)} />
-        </div>
+      <Modal show={showUpdatedTask} onHide={handleUpdateClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Create Task</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+          <form className='form'>
+            <div className="form-group">
+              <label htmlFor="">ID: {taskEdit.id}</label>
+              <br />
+              <label htmlFor="">Activity Name</label>
+              <input
+                type="text"
+                className="form-control h-auto"
+                placeholder="Activity name"
+                value={activity}
+                onChange={(event) => setActivity(event.target.value)} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="">Location</label>
+              <input
+                type="text"
+                className="form-control h-auto"
+                value={location}
+                placeholder="Location" onChange={(event) => setLocation(event.target.value)} />
+            </div>
 
-
-        <div className="form-group">
-          <button
-            type="submit"
-            className='btn btn-info w-100'
-            disabled={loading ? true : false}>
-            {loading ? <Spinner color={'#fff'} /> : 'Update Task'}</button>
-        </div>
-      </form>
+            <div className="form-group">
+              <label htmlFor="">Objective</label>
+              <textarea
+                className="form-control"
+                id="objective" rows="4"
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}>
+              </textarea>
+            </div>
+            <div className="form-group">
+              <label htmlFor="">Rescheduled date</label>
+              <input
+                type="date"
+                className="form-control h-auto"
+                value={date}
+                onChange={(event) => setDate(event.target.value)} />
+            </div>
+          </form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="dark" onClick={handleUpdateClose} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Close'}
+					</Button>
+					<Button variant="info" onClick={onSubmitHandler} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Update Task'}  
+					</Button>
+				</Modal.Footer>
+			</Modal>
     </div>
   )
 }

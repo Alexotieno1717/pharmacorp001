@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { useAuth } from '../context/auth-context';
 import { useHistory } from 'react-router';
+import './Sidebar.scss';
 
 
 const Navbar = () =>{
@@ -62,14 +63,15 @@ const Navbar = () =>{
         </div> */}
         <ul className="navbar-nav navbar-nav-right">
           <li className="nav-item nav-profile">
-            <Dropdown alignRight>
+            <Dropdown>
               <Dropdown.Toggle className="nav-link">
                 <div className="nav-profile-img">
-                  <img src={require("../assets/images/faces/face1.jpg")} alt="user"/>
+                  <i className='fa fa-user-circle ms-4 userIcon' />
+                  {/* <img src={require("../assets/images/faces/face1.jpg")} alt="user"/> */}
                   <span className="availability-status online"></span>
                 </div>
                 <div className="nav-profile-text">
-                  <p className="mb-1 text-black"><Trans>{user?.names}</Trans></p>
+                  <p className="mb-1 text-black"><Trans>{user?.username}</Trans></p>
                   
                 </div>
               </Dropdown.Toggle>

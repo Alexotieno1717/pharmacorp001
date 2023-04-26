@@ -14,24 +14,6 @@ function FilterExpenses({ filterExpenses, loading, show, handleClose, handleFilt
 
 	return (
 		<div>
-			{/* <form onSubmit={handleSubmit}>
-                <Calendar selectRange onChange={setSelectedValue} value={selectedValue}/> */}
-			{/* <select
-                    className="form-control h-auto"
-                    value={status}
-                    onChange={(event) => setStatus(event.target.value)}>
-                    <options value={'1'}>pending</options>
-                    <options value={'2'}>completed</options>
-                    <options value={'3'}>revisit</options>
-                    <options value={'4'}>cancelled</options>
-                </select> */}
-			{/* <div className="form-group">
-              <button 
-                type="submit" 
-                className='btn btn-info w-100'
-                disabled={loading ? true: false}>
-                {loading ? <Spinner color={'#fff'}/> : 'Filter Expenses'}</button>
-              </div> */}
 
 			{/* </form> */}
 			<Modal show={show} onHide={handleClose}>
@@ -47,10 +29,10 @@ function FilterExpenses({ filterExpenses, loading, show, handleClose, handleFilt
 					/>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose} disabled={loading===true}>
+					<Button variant="dark" onClick={handleClose} disabled={loading===true}>
 						 {loading === true ? <Spinner color={'#fff'} /> : 'Close'}
 					</Button>
-					<Button variant="primary" onClick={handleFilter} disabled={loading===true}>
+					<Button variant="info" onClick={handleFilter} disabled={loading===true}>
 						 {loading === true ? <Spinner color={'#fff'}/> : 'Filter'}
 					</Button>
 				</Modal.Footer>
