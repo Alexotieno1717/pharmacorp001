@@ -150,6 +150,7 @@ function Expenses() {
             }
             return item;
         })
+        console.log("new expense", newExpense)
         setExpenses(newExpense);
     }
 

@@ -35,6 +35,21 @@ function Dashboard() {
   const [revisitsStatus, setRevisitsStatus] = useState({})
   const [completeStatus, setCompleteStatus] = useState({})
   const [searchInput, setSearchInput] = useState('')
+  const [show, setShow] = useState(false);
+  const [cancelShow, setCancelShow] = useState(false);
+  const [completeShow, setCompleteShow] = useState(false);
+
+  // Revists modal trigger
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // Cancel modal trigger
+  const handleCancelClose = () => setCancelShow(false);
+  const handleCancelShow = () => setCancelShow(true);
+
+  // Cancel modal trigger
+  const handleCompleteClose = () => setCompleteShow(false);
+  const handleCompleteShow = () => setCompleteShow(true);
 
   // Dates
   const newDate = new Date();
@@ -238,33 +253,39 @@ function Dashboard() {
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
               <li className='dropdown-item'
                 onClick={() => chooseStatusTypeWithoutPosition(row.original)}>
-                <ModalIcon
-                  target="revisits"
-                  label={<span className="text-dark">
-                    Revisits
-                  </span>
-                  }
-                />
+                <span 
+                  onClick={handleShow}
+                >
+                    {
+                        <span>
+                          Revisits
+                        </span>
+                    }
+                </span>
               </li>
               <li className='dropdown-item'
                 onClick={() => chooseStatusType(row.original)}>
-                <ModalIcon
-                  target="complete"
-                  label={<span className="text-dark">
-                    Complete
-                  </span>
-                  }
-                />
+                <span 
+                  onClick={handleCompleteShow}
+                >
+                    {
+                        <span>
+                          Complete
+                        </span>
+                    }
+                </span>
               </li>
               <li className='dropdown-item'
                 onClick={() => chooseStatusTypeWithoutPosition(row.original)}>
-                <ModalIcon
-                  target="cancel"
-                  label={<span className="text-dark">
-                    Cancel
-                  </span>
-                  }
-                />
+                <span 
+                  onClick={handleCancelShow}
+                >
+                    {
+                        <span>
+                          Cancel
+                        </span>
+                    }
+                </span>
               </li>
             </ul>
           </div>
@@ -408,15 +429,11 @@ function Dashboard() {
 
 
       {/* Modals for status */}
-      <Modal id="complete" label='Complete Task Review'>
-        <Complete handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} />
-      </Modal>
-      <Modal id="revisits" label='Revisits Task Review'>
-        <Revisits handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} />
-      </Modal>
-      <Modal id="cancel" label='Cancel Task Review'>
-        <Cancel handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} />
-      </Modal>
+      <Complete handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} completeShow={completeShow} handleCompleteClose={handleCompleteClose} />
+      {/* modal revists */}
+      <Revisits handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} show={show} handleClose={handleClose} />
+      {/* Cancel */}
+      <Cancel handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} cancelShow={cancelShow} handleCancelClose={handleCancelClose} />
 
     </div>
   );
