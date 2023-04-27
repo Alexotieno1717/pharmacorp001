@@ -96,7 +96,7 @@ function Dashboard() {
 
     const params = new URLSearchParams({
       rep_id: user.client_id,
-      start_date: newDate,
+      start_date: currentDay,
       task_status: 3
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
@@ -112,7 +112,7 @@ function Dashboard() {
 
     const params = new URLSearchParams({
       rep_id: user.client_id,
-      start_date: newDate,
+      start_date: currentDay,
       task_status: 2
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
