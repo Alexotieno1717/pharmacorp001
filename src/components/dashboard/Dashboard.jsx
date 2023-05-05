@@ -2,8 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { useAuth } from '../../context/auth-context';
-import Modal from '../../shared/Modal/Modal';
-import ModalIcon from '../../shared/Modal/modal-button/ModalIcon';
 import Export from '../../shared/table/Export';
 import Table from '../../shared/table/Table';
 import { useGeolocated } from 'react-geolocated';
@@ -14,11 +12,13 @@ import ColumnFilter from "../../shared/table/ColumnFilter";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css';
 import './Dashboard.scss';
+import { ValidationAlert } from '../../utils/alerts';
+import { COMPLETED, REVISIT } from '../../constants';
 
 
 function Dashboard() {
 
-  const { coords, getPosition, isGeolocationAvailable, isGeolocationEnabled, positionError } = useGeolocated({
+  const { coords, getPosition, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
     positionOptions: {
       enableHighAccuracy: false,
     },
@@ -28,35 +28,31 @@ function Dashboard() {
 
   //Task State 
   const [tasks, setTasks] = useState([])
-  //const [value, onChange] = useState(new Date());
   const [taskSelected, setTaskSelected] = useState();
   const [totalExpenses, setTotalExpenses] = useState('');
   const [loading, setLoading] = useState(false);
   const [revisitsStatus, setRevisitsStatus] = useState({})
   const [completeStatus, setCompleteStatus] = useState({})
   const [searchInput, setSearchInput] = useState('')
-  // const [startDate, setStartDate] = useState(new Date())
-  // const [endDate, setEndDate] = useState(new Date())
+  const [show, setShow] = useState(false);
+  const [cancelShow, setCancelShow] = useState(false);
+  const [completeShow, setCompleteShow] = useState(false);
 
-  // Dates
-  const newDate = new Date();
-  console.log(newDate.toDateString());
+  // Revists modal trigger
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // Cancel modal trigger
+  const handleCancelClose = () => setCancelShow(false);
+  const handleCancelShow = () => setCancelShow(true);
+
+  // Cancel modal trigger
+  const handleCompleteClose = () => setCompleteShow(false);
+  const handleCompleteShow = () => setCompleteShow(true);
 
   // user state
   const { user } = useAuth();
 
-  //React Date Range Dates
-  // const selectionRange = {
-  //   startDate: startDate,
-  //   endDate: endDate,
-  //   key: 'selection',
-  // }
-
-  // const handleSelect = (ranges) => {
-  //   setStartDate(ranges.selection.startDate)
-  //   setEndDate(ranges.selection.endDate)
-
-  // }
   const currentDay = new Date().toISOString().slice(0, 10)
   // use effect to fetch content on page mount
   useEffect(() => {
@@ -65,7 +61,12 @@ function Dashboard() {
       axios
         .get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}&start_date=${currentDay}`)
         .then((response) => {
-          setTasks(response.data.activities)
+          if(response.data.status === false) {
+              ValidationAlert(response.data.status_message)
+          } else {
+            setTasks(response.data.activities)
+
+          }
         }).catch((err) => {
           console.log(err)
         })
@@ -90,13 +91,16 @@ function Dashboard() {
 
     const params = new URLSearchParams({
       rep_id: user.client_id,
-      start_date: newDate,
-      task_status: 3
+      start_date: currentDay,
+      task_status: REVISIT
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
       .then((res) => {
-        console.log('getting revisits', res.data)
-        setRevisitsStatus(res.data.data)
+        if(res.data.status === true) {
+          // console.log('getting revisits', res.data)
+          setRevisitsStatus(res.data.data)
+
+        }
       }).catch((err) => {
         console.log(err);
       })
@@ -106,13 +110,17 @@ function Dashboard() {
 
     const params = new URLSearchParams({
       rep_id: user.client_id,
-      start_date: newDate,
-      task_status: 2
+      start_date: currentDay,
+      task_status: COMPLETED
     }).toString()
     axios.get(`${process.env.REACT_APP_API_URL}/filter-task-status?${params}`)
       .then((res) => {
         // console.log('getting completed tasks', res.data)
-        setCompleteStatus(res.data.data)
+        if(res.data.status === true) {
+          // console.log('getting revisits', res.data)        
+          setCompleteStatus(res.data.data)
+        }
+
       }).catch((err) => {
         console.log(err);
       })
@@ -124,7 +132,10 @@ function Dashboard() {
       .get(`${process.env.REACT_APP_API_URL}/total-expenses?rep_id=${user.client_id}`)
       .then((response) => {
         // console.log(response.data)
-        setTotalExpenses(response.data.total_expenses)
+        if(response.data.status === true) {
+          setTotalExpenses(response.data.total_expenses)
+
+        }
       }).catch((err) => {
         console.log(err)
       })
@@ -241,39 +252,45 @@ function Dashboard() {
 
             >
               {cell.row.original.status}
-              <i class="fas fa-caret-down icon-caret d-none"></i>
+              <i className="fas fa-caret-down icon-caret d-none"></i>
             </a>
 
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
               <li className='dropdown-item'
                 onClick={() => chooseStatusTypeWithoutPosition(row.original)}>
-                <ModalIcon
-                  target="revisits"
-                  label={<span className="text-dark">
-                    Revisits
-                  </span>
-                  }
-                />
+                <span 
+                  onClick={handleShow}
+                >
+                    {
+                        <span>
+                          Revisits
+                        </span>
+                    }
+                </span>
               </li>
               <li className='dropdown-item'
                 onClick={() => chooseStatusType(row.original)}>
-                <ModalIcon
-                  target="complete"
-                  label={<span className="text-dark">
-                    Complete
-                  </span>
-                  }
-                />
+                <span 
+                  onClick={handleCompleteShow}
+                >
+                    {
+                        <span>
+                          Complete
+                        </span>
+                    }
+                </span>
               </li>
               <li className='dropdown-item'
                 onClick={() => chooseStatusTypeWithoutPosition(row.original)}>
-                <ModalIcon
-                  target="cancel"
-                  label={<span className="text-dark">
-                    Cancel
-                  </span>
-                  }
-                />
+                <span 
+                  onClick={handleCancelShow}
+                >
+                    {
+                        <span>
+                          Cancel
+                        </span>
+                    }
+                </span>
               </li>
             </ul>
           </div>
@@ -404,7 +421,7 @@ function Dashboard() {
 
                 <Table
                   columns={columns}
-                  data={tasks.filter((row) =>
+                  data={tasks?.filter((row) =>
                     row.status.includes(searchInput)
                   )}
                   padeIndex={0}
@@ -417,15 +434,11 @@ function Dashboard() {
 
 
       {/* Modals for status */}
-      <Modal id="complete" label='Complete Task Review'>
-        <Complete handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} />
-      </Modal>
-      <Modal id="revisits" label='Revisits Task Review'>
-        <Revisits handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} />
-      </Modal>
-      <Modal id="cancel" label='Cancel Task Review'>
-        <Cancel handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} />
-      </Modal>
+      <Complete handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} completeShow={completeShow} handleCompleteClose={handleCompleteClose} />
+      {/* modal revists */}
+      <Revisits handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} show={show} handleClose={handleClose} />
+      {/* Cancel */}
+      <Cancel handleComplete={handleComplete} taskSelected={taskSelected} loading={loading} setLoading={setLoading} user={user} cancelShow={cancelShow} handleCancelClose={handleCancelClose} />
 
     </div>
   );

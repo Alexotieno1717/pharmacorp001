@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Spinner } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { SuccessAlert, ValidationAlert } from '../../utils/alerts';
 import { useAuth } from "../../context/auth-context";
 import axios from "axios";
+import './UpdateExpenses.scss';
 
-function AddExpenses() {
+
+function AddExpenses({showExpenseAdd, handleExpenseAddClose, onAddEpense}) {
 
     const [location, setLocation] = useState('')
     const [amount, setAmount] = useState('')
@@ -44,13 +46,17 @@ function AddExpenses() {
                     } else {
                         //Alert Message success
                         SuccessAlert(data.status_message)
+
+                        // Get Updated task from state
+                        const newExpense = data.profile;
+                        onAddEpense(newExpense);
+
+                        console.log(data.profile)
+
                         // turn off loading
                         setLoading(false);
 
-                        setTimeout(() => {
-                            window.location.href = '/expenses';
-
-                        }, 3000)
+                        handleExpenseAddClose()
 
                     }
                 },
@@ -90,64 +96,76 @@ function AddExpenses() {
 
 
     return (
-        <>
-            <div className="container-fluid">
-                <form onSubmit={(event) => onSubmitHandler(event)}>
-                    <div className="row">
-                        <div className="col-md-12 mt-3">
-                            <div className="form-group">
-                                <label htmlFor="formFile" className="form-label">Upload Receipt Image</label>
-                                <input type="file" accept="image/*" className='form-control mt-3' onChange={handleFileUpload} placeholder='Choose image' required />
+        <div>
+            <Modal show={showExpenseAdd} onHide={handleExpenseAddClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Create Task</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+                    <form class='form'>
+                        <div className="row">
+                            <div className="col-md-12 mt-3">
+                                <div className="form-group">
+                                    <label htmlFor="formFile" className="form-label">Upload Receipt Image</label>
+                                    <input type="file" accept="image/*" className='form-control mt-3' onChange={handleFileUpload} placeholder='Choose image' required />
+                                </div>
+
+                                {photo &&
+                                    <div
+                                        style={{
+                                            backgroundImage: `url(${URL.createObjectURL(photo)})`,
+                                            backgroundPosition: "center",
+                                            backgroundSize: "cover",
+                                            width: "100px",
+                                            height: "80px",
+                                            padding: "10px",
+                                            marginRight: "15px",
+                                            marginBottom: "15px",
+                                            borderRadius: "4px",
+                                        }}
+                                    >
+                                    </div>}
+                                <div className="form-group">
+                                    <label htmlFor="">Activity Type:</label>
+                                    <select className="form-select h-auto" onChange={(event) => setGetActivityId(event.target.value)} required>
+                                        <option value="" disabled>Select Activity type.....</option>
+                                        {activities.map((activity) => (
+                                            <option key={activity.id} value={activity.id}>
+                                                {activity.activity_name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="">Amount:</label>
+                                    <input type="text" className="form-control h-auto" placeholder="Amount" onChange={(event) => setAmount(event.target.value)} required />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="">Place </label>
+                                    <input type="text" className="form-control h-auto" placeholder="Location" onChange={(event) => setLocation(event.target.value)} required />
+                                </div>
+                                {/* <div className="form-group">
+                                    <button
+                                        type="submit"
+                                        className='btn btn-info w-100'
+                                        disabled={loading}>
+                                        {loading ? <Spinner color={'#fff'} /> : 'UPLOAD RECEIPT'}</button>
+                                </div> */}
                             </div>
 
-                            {photo &&
-                                <div
-                                    style={{
-                                        backgroundImage: `url(${URL.createObjectURL(photo)})`,
-                                        backgroundPosition: "center",
-                                        backgroundSize: "cover",
-                                        width: "100px",
-                                        height: "80px",
-                                        padding: "10px",
-                                        marginRight: "15px",
-                                        marginBottom: "15px",
-                                        borderRadius: "4px",
-                                    }}
-                                >
-                                </div>}
-                            <div className="form-group">
-                                <label htmlFor="">Activity Type:</label>
-                                <select className="form-select h-auto" onChange={(event) => setGetActivityId(event.target.value)} required>
-                                    <option value="" disabled>Select Activity type.....</option>
-                                    {activities.map((activity) => (
-                                        <option key={activity.id} value={activity.id}>
-                                            {activity.activity_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="">Amount:</label>
-                                <input type="text" className="form-control h-auto" placeholder="Amount" onChange={(event) => setAmount(event.target.value)} required />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="">Place </label>
-                                <input type="text" className="form-control h-auto" placeholder="Location" onChange={(event) => setLocation(event.target.value)} required />
-                            </div>
-                            <div className="form-group">
-                                <button
-                                    type="submit"
-                                    className='btn btn-info w-100'
-                                    disabled={loading}>
-                                    {loading ? <Spinner color={'#fff'} /> : 'UPLOAD RECEIPT'}</button>
-                            </div>
                         </div>
-
-                    </div>
-                </form>
-            </div>
-
-        </>
+                    </form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="dark" onClick={handleExpenseAddClose} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Close'}
+					</Button>
+					<Button variant="info" onClick={onSubmitHandler} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Create Task'}  
+					</Button>
+				</Modal.Footer>
+			</Modal>
+        </div>
     )
 }
 

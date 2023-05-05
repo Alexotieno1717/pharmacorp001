@@ -39,8 +39,8 @@ function DeleteTask(props) {
                     <p>Do you wish to delete activity {task.activity_name}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose} disabled={loading === true}>{loading === true ? <Spinner color="#fff" /> : 'Close'}</Button>
-                    <Button variant="primary" onClick={handleDelete} disabled={loading === true}>{loading === true ? <Spinner color={'#fff'} /> : 'Confirm'}</Button>
+                    <Button variant="dark" onClick={handleClose} disabled={loading === true}>{loading === true ? <Spinner color="#fff" /> : 'Close'}</Button>
+                    <Button variant="danger" onClick={handleDelete} disabled={loading === true}>{loading === true ? <Spinner color={'#fff'} /> : 'Confirm'}</Button>
                 </Modal.Footer>
             </Modal>
         </div>

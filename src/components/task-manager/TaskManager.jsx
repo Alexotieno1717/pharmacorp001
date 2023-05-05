@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import Modal from '../../shared/Modal/Modal';
-import ModalButton from '../../shared/Modal/modal-button/ModalButton';
 import AddTask from './AddTask';
 import ModalIcon from '../../shared/Modal/modal-button/ModalIcon';
 import ViewTask from './ViewTask';
@@ -25,6 +24,8 @@ function TaskManager() {
     const [selectedValue, setSelectedValue] = useState(new Date(), []);
     const [show, setShow] = useState(false);
     const [showDeleteTask, setShowDeleteTask] = useState(false);
+    const [showAddTask, setShowAddTask] = useState(false);
+    const [showUpdatedTask, setShowUpdatedTask] = useState(false);
     const [productId, setProductId] = useState("");
     const [activityType, setActivityType] = useState('')
     const [searchInput, setSearchInput] = useState('')
@@ -37,6 +38,12 @@ function TaskManager() {
 
     const handleDeleteClose = () => setShowDeleteTask(false)
     const handleShowClose = () => setShowDeleteTask(true)
+
+    const handleTaskClose = () => setShowAddTask(false)
+    const handleTaskShow = () => setShowAddTask(true)
+
+    const handleUpdateClose = () => setShowUpdatedTask(false)
+    const handleUpdateShow = () => setShowUpdatedTask(true)
 
     const resetFilter = () => setFilteredTasks([])
 
@@ -122,27 +129,15 @@ function TaskManager() {
             })
     }
 
-    const deleteTask = (id) => {
-        // Axios delete tutorial
-        axios
-            .post(`${process.env.REACT_APP_API_URL}/delete-activity?activity_id=${id}`)
-            .then((res) => {
-                if (res.data.status === false) {
-                    ValidationAlert(res.data.status_message)
-                } else {
+    const filterDeleteTask = (task) => setTasks(tasks.filter(item => item.id !== task.id))
 
-                    SuccessAlert(res.data.status_message)
-                    console.log(res.data)
-                    setTasks(tasks.filter(item => item.id !== id))
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
-
-
+    const updateTasks = (task) => {
+        setTasks([task, ...tasks])
     }
 
-    const filterDeleteTask = (task) => setTasks(tasks.filter(item => item.id !== task.id))
+    const editTask = (updatedTask) =>{
+        setTasks(tasks.map(task => task.id === updatedTask.id ? updatedTask : task));
+    }
 
     // is user doesn't exist it will redirect
     if (!user) {
@@ -221,7 +216,20 @@ function TaskManager() {
 
 
                         <span tabIndex="0" data-toggle="tooltip" title="Edit Task">
-                            <ModalIcon
+                            <span 
+                                onClick={handleUpdateShow}
+                            >
+                                {
+                                    <span
+                                        onClick={() => {
+                                            setTaskEdit(cell.row.original)
+                                        }}
+                                    >
+                                        <i className="fa fa-edit text-success me-2" />
+                                    </span>
+                                }
+                            </span>
+                            {/* <ModalIcon
                                 target="edit"
                                 label={<i className="fa fa-edit text-success me-2">
                                 </i>
@@ -229,7 +237,7 @@ function TaskManager() {
                                 onClick={() => {
                                     setTaskEdit(cell.row.original)
                                 }}
-                            />
+                            /> */}
                         </span>
 
 
@@ -254,12 +262,15 @@ function TaskManager() {
                     <div className="col-12 col-md-10 mb-3">
                         <div className="d-flex d-md-none justify-content-between">
                             {/* Start Create Task Button */}
-                            <ModalButton
-                                target="task"
-                                label={<span><i className="fa fa-plus-circle me-2">
+                            <button 
+                                className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0' 
+                                type="button"
+                                onClick={handleTaskShow}
+                            >{
+                                <span><i className="fa fa-plus-circle me-2">
                                 </i>Create Task</span>
-                                }
-                            />
+                            }</button>
+                            
                             {/* End Create Task Button */}
                             <button className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
                             </i>Filter Tasks</span>}</button>
@@ -268,21 +279,28 @@ function TaskManager() {
                         </div>
                         {/* Start Create Task Button */}
                         <div className="d-none d-md-block">
-                            <ModalButton
-                                target="task"
-                                label={<span><i className="fa fa-plus-circle me-2">
-                                </i>Create Task</span>
+                            <button 
+                                className='btn btn-info text-white me-0 ms-md-3 mb-3 mb-md-0' 
+                                type="button" 
+                                onClick={handleTaskShow}
+                            >
+                                {
+                                    <span>
+                                        <i className="fa fa-plus-circle me-2" />
+                                        Create Task
+                                    </span>
                                 }
-                            />
+                            </button>
+                            
                             {/* End Create Task Button */}
                             <button className='btn btn-info text-white me-0 ms-md-3 mb-3 mb-md-0' type="button" onClick={handleShow}>{<span><i className="fa fa-plus-circle me-2">
                             </i>Filter Tasks</span>}</button>
                             <button className={`${filteredTasks.length < 1 ? 'd-none' : ''}  btn btn-outline-primary text-primary mb-5 me-0 ms-3`} type="button" onClick={resetFilter}>{<span><i className="fa fa-plus-circle text-primary me-2">
                             </i>Reset Filter</span>}</button>
-                            <form className="d-inline-block">
+                            <form className="form d-inline-block mt-md-3">
                                 <div className=" ms-4 input-group">
-                                    <input type="text" className="form-control" id="searchTask" placeholder="Search a task" onChange={(event) => setSearchInput(event.target.value)} />
-                                    <span class="input-group-text" id="searchTask">&#x1F50D;</span>
+                                    <input type="text" className="form-control form-control-md" id="searchTask" placeholder="Search a task......." onChange={(event) => setSearchInput(event.target.value)} />
+                                    {/* <span className="input-group-text" id="searchTask">&#x1F50D;</span> */}
                                 </div>
                             </form>
                         </div>
@@ -308,15 +326,26 @@ function TaskManager() {
                     </div>
                 </div>
             </div>
-            <Modal id="task" label='Create a Task'>
-                <AddTask />
-            </Modal>
+
+            <AddTask 
+                showAddTask={showAddTask}
+                handleTaskClose={handleTaskClose}
+                onAddTask={updateTasks}
+            />
+
+            {/* View Modal */}
             <Modal id="view" label='View a Task'>
                 <ViewTask taskView={taskView} />
             </Modal>
-            <Modal id="edit" label='Edit a Task'>
-                <EditTask taskEdit={taskEdit} />
-            </Modal>
+
+            {/* Edit Modal */}
+            <EditTask 
+                showUpdatedTask={showUpdatedTask}
+                handleUpdateClose={handleUpdateClose}
+                taskEdit={taskEdit}
+                editTask={editTask}
+            />
+
             {/* Filter Task */}
             <FilterTask
                 filterTask={setTasks}

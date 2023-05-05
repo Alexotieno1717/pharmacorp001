@@ -1,11 +1,12 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { SuccessAlert, ValidationAlert } from '../../../utils/alerts';
+import { CANCELLED } from '../../../constants';
 
 function Cancel(props) {
 
-    const { user, taskSelected, loading, setLoading } = props;
+    const { user, taskSelected, loading, setLoading, cancelShow, handleCancelClose } = props;
 
     const [reason, setReason] = useState("");
 
@@ -21,7 +22,7 @@ function Cancel(props) {
             notes: reason,
             scheduled_date: taskSelected.scheduled_date,
             id: taskSelected.id,
-            status: "4",
+            status: CANCELLED,
         });
 
         axios.post(`${process.env.REACT_APP_API_URL}/update-activity?${params}`)
@@ -31,6 +32,9 @@ function Cancel(props) {
                 } else {
                     // Alert Message success
                     SuccessAlert(response.data.status_message);
+
+                    // Closing modal trigger
+                    handleCancelClose()
                 }
                 setLoading(false);
             }).catch((error) => {
@@ -41,28 +45,33 @@ function Cancel(props) {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="">Reason:</label>
-                    <input
-                        type="text"
-                        className="form-control h-auto"
-                        placeholder="Enter your Reason..."
-                        onChange={(event) => setReason(event.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <button
-                        type="submit"
-                        className="btn btn-info w-100"
-                        disabled={loading === true}
-                    >
-                        {loading === true ? <Spinner color={"#fff"} /> : "Submit"}
-                    </button>
-                </div>
-            </form>
+            <Modal show={cancelShow} onHide={handleCancelClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Revists Task</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="">Reason:</label>
+                            <input
+                                type="text"
+                                className="form-control h-auto"
+                                placeholder="Enter your Reason..."
+                                onChange={(event) => setReason(event.target.value)}
+                                required
+                            />
+                        </div>
+                    </form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="dark" onClick={handleCancelClose} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Close'}
+					</Button>
+					<Button variant="info" onClick={handleSubmit} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Submit'}  
+					</Button>
+				</Modal.Footer>
+			</Modal>
         </div>
     );
 }

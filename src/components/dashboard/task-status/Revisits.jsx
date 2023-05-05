@@ -1,11 +1,12 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { SuccessAlert, ValidationAlert } from '../../../utils/alerts';
+import { REVISIT } from '../../../constants';
 
 function Revisits(props) {
 
-    const { user, taskSelected, loading, setLoading } = props;
+    const { user, taskSelected, loading, setLoading, show, handleClose } = props;
     
     const [reason, setReason] = useState("");
     const [rescheduledDate, setRescheduledDate] = useState("");
@@ -23,7 +24,7 @@ function Revisits(props) {
             notes: reason,
             scheduled_date: rescheduledDate,
             id: taskSelected.id,
-            status: "3",
+            status: REVISIT,
         })
 
         axios.post(`${process.env.REACT_APP_API_URL}/update-activity?${params}`)
@@ -33,6 +34,9 @@ function Revisits(props) {
             } else {
                 // Alert Message success
                 SuccessAlert(response.data.status_message);
+
+                // Closing the Modal after submitting
+                handleClose()
             }
             setLoading(false);
 
@@ -44,32 +48,38 @@ function Revisits(props) {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="">Reason:</label>
-                    <input
-                        type="text"
-                        className="form-control h-auto"
-                        placeholder="Enter your Reason..."
-                        onChange={(event)=> setReason(event.target.value)}
-                        required
-                    />
-                </div>
+            <Modal show={show} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Revists Task</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="">Reason:</label>
+                            <input
+                                type="text"
+                                className="form-control h-auto"
+                                placeholder="Enter your Reason..."
+                                onChange={(event)=> setReason(event.target.value)}
+                                required
+                            />
+                        </div>
 
-                <div className="form-group">
-                    <label htmlFor="">Reschedule Date:</label>
-                    <input type="date" className='form-control h-auto' onChange={(event) => setRescheduledDate(event.target.value)} required/>
-                </div>
-
-                <div className="form-group">
-                    <button
-                        type="submit"
-                        className="btn btn-info w-100"
-                        disabled={loading === true}
-                    >{loading === true ? <Spinner color={"#fff"}/> : 'Submit'}
-                    </button>
-                </div>
-            </form>
+                        <div className="form-group">
+                            <label htmlFor="">Reschedule Date:</label>
+                            <input type="date" className='form-control h-auto' onChange={(event) => setRescheduledDate(event.target.value)} required/>
+                        </div>
+                    </form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="dark" onClick={handleClose} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Close'}
+					</Button>
+					<Button variant="info" onClick={handleSubmit} disabled={loading === true}>
+						{loading === true ? <Spinner color={'#fff'} /> : 'Submit'}  
+					</Button>
+				</Modal.Footer>
+			</Modal>
         </div>
     );
 }

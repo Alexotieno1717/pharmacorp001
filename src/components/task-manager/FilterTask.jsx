@@ -3,7 +3,6 @@ import { Spinner } from "react-bootstrap";
 import { Calendar } from "react-calendar";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useAuth } from "../../context/auth-context";
 import axios from "axios";
 
 function FilterTask({ filterTask, loading, status, setStatus, show, handleClose, handleFilter, selectedValue, setSelectedValue, setActivityType, setProductId }) {
@@ -12,13 +11,15 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 
 	const options = ['1-on-1', 'RTD', 'CME']
 
-	// User state
-	const { user } = useAuth();
-
 	const fetchProducts = () => {
 		axios.get(`${process.env.REACT_APP_API_URL}/fetch-products`)
 			.then((res) => {
-				setProducts(res.data.data)
+				if(res.data.status === false) {
+		
+				} else {
+		
+				setProducts(res.data.products)
+				}
 				// console.log(res.data)
 			}).catch((err) => {
 				console.log(err)
@@ -86,10 +87,10 @@ function FilterTask({ filterTask, loading, status, setStatus, show, handleClose,
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose} disabled={loading === true}>
+					<Button variant="dark" onClick={handleClose} disabled={loading === true}>
 						{loading === true ? <Spinner color={'#fff'} /> : 'Close'}
 					</Button>
-					<Button variant="primary" onClick={handleFilter} disabled={loading === true}>
+					<Button variant="info" onClick={handleFilter} disabled={loading === true}>
 						{loading === true ? <Spinner color={'#fff'} /> : 'Filter'}
 					</Button>
 				</Modal.Footer>
