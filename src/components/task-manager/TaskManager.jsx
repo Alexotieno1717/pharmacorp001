@@ -139,6 +139,14 @@ function TaskManager() {
         setTasks(tasks.map(task => task.id === updatedTask.id ? updatedTask : task));
     }
 
+    const updateTasks = (task) => {
+        setTasks([task, ...tasks])
+    }
+
+    const editTask = (updatedTask) =>{
+        setTasks(tasks.map(task => task.id === updatedTask.id ? updatedTask : task));
+    }
+
     // is user doesn't exist it will redirect
     if (!user) {
         return window.location.href = '/auth/login';

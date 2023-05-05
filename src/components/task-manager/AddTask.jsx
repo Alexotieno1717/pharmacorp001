@@ -22,6 +22,8 @@ function AddTask({showAddTask, handleTaskClose, onAddTask}) {
   const [products, setProducts] = useState([]);
   const [clients, setClients] = useState([]);
 
+  const [dataTask, setDataTask] = useState({})
+
   // user state
   const { user } = useAuth();
 
