@@ -260,10 +260,10 @@ function TaskManager() {
             <div className="col-md-12 ">
                 <div className="row">
                     <div className="col-12 col-md-10 mb-3">
-                        <div className="d-flex d-md-none justify-content-between">
+                        <div className="d-flex flex-sm-row d-md-none justify-content-between md-3">
                             {/* Start Create Task Button */}
-                            <button 
-                                className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0' 
+                            <button
+                                className='btn btn-info text-white mb-md-5 me-0 ms-md-3 mb-3 mb-md-0'
                                 type="button"
                                 onClick={handleTaskShow}
                             >{

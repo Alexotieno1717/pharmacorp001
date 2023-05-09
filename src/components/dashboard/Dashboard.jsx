@@ -62,7 +62,7 @@ function Dashboard() {
         .get(`${process.env.REACT_APP_API_URL}/fetch-activities?rep_id=${user.client_id}&start_date=${currentDay}`)
         .then((response) => {
           if(response.data.status === false) {
-              ValidationAlert(response.data.status_message)
+              // ValidationAlert(response.data.status_message)
           } else {
             setTasks(response.data.activities)
 
