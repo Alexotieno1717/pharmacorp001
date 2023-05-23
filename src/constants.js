@@ -1,3 +1,4 @@
+export const DISAPPROVED = -1
 export const PENDING = 0
 export const APPROVED = 1
 export const COMPLETED = 2
